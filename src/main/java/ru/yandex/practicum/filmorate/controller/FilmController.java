@@ -16,7 +16,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    private static int id = 0;
+    private static int id = 1;
     private final Map<Integer, Film> films = new HashMap<>();
 
     @GetMapping()
@@ -30,19 +30,18 @@ public class FilmController {
         log.info("Получен запрос на добавление фильма");
         validation(film);
 
-        for (Integer id : films.keySet()) {
-            if (id.equals(film.getId())) {
-                films.put(film.getId(), film);
-            } else {
-                log.warn("Обновление несуществующего фильма");
-                throw new ValidationException();
-            }
+        if (films.get(film.getId()) == null) {
+            log.warn("Обновление несуществующего фильма");
+            throw new ValidationException();
         }
+
+        films.put(film.getId(), film);
+
         return film;
     }
 
     @PostMapping()
-    public Film createFilm(@RequestBody Film film) {
+    public Film addFilm(@RequestBody Film film) {
         log.info("Получен запрос на добавление фильма");
         validation(film);
         int filmId = idGenerator();
@@ -55,23 +54,20 @@ public class FilmController {
         boolean valid = film.getName().isBlank()
                 || film.getDescription().length() >= 200
                 || film.getReleaseDate().isAfter(LocalDate.now())
-                || film.getReleaseDate().isBefore(LocalDate.parse("28-12-1895", DateTimeFormatter.ofPattern("dd-MM-yyyy")))
-                || film.getDuration().getSeconds() < 0;
-
-        boolean valid1 = film.getDuration() == null
+                || film.getReleaseDate().
+                isBefore(LocalDate.parse("28-12-1895", DateTimeFormatter.ofPattern("dd-MM-yyyy")))
+                || film.getDuration().getSeconds() < 0
                 || film.getName() == null
                 || film.getReleaseDate() == null
                 || film.getDescription() == null;
 
-
-        if (valid || valid1) {
+        if (valid) {
             log.warn("Ошибка валидации");
             throw new ValidationException();
         }
     }
 
     private int idGenerator() {
-        id++;
-        return id;
+        return id++;
     }
 }
