@@ -22,7 +22,6 @@ public class FilmController {
     @GetMapping()
     public List<Film> getFilms() {
         log.info("Получен запрос на получение фильмов");
-        //return films;
         return new ArrayList<>(films.values());
     }
 
@@ -35,6 +34,7 @@ public class FilmController {
             if (id.equals(film.getId())) {
                 films.put(film.getId(), film);
             } else {
+                log.warn("Обновление несуществующего фильма");
                 throw new ValidationException();
             }
         }
@@ -46,8 +46,6 @@ public class FilmController {
         log.info("Получен запрос на добавление фильма");
         validation(film);
         int filmId = idGenerator();
-        //System.out.println("DURATION = " + film.getDuration());
-
         film.setId(filmId);
         films.put(filmId, film);
         return film;
@@ -60,8 +58,7 @@ public class FilmController {
                 || film.getReleaseDate().isBefore(LocalDate.parse("28-12-1895", DateTimeFormatter.ofPattern("dd-MM-yyyy")))
                 || film.getDuration().getSeconds() < 0;
 
-        boolean valid1 = //film.getId() == null
-                 film.getDuration() == null
+        boolean valid1 = film.getDuration() == null
                 || film.getName() == null
                 || film.getReleaseDate() == null
                 || film.getDescription() == null;
