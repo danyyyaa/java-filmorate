@@ -19,6 +19,7 @@ public class FilmController {
     @GetMapping()
     public Collection<Film> getFilms() {
         log.info("Получен запрос на получение фильмов");
+        log.info("Получение фильмов");
         return films.values();
     }
 
@@ -33,7 +34,7 @@ public class FilmController {
         }
 
         films.put(film.getId(), film);
-
+        log.info("Фильм обновлен");
         return film;
     }
 
@@ -44,6 +45,7 @@ public class FilmController {
         int filmId = idGenerator();
         film.setId(filmId);
         films.put(filmId, film);
+        log.info("Фильм добавлен");
         return film;
     }
 

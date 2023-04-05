@@ -3,61 +3,67 @@ package ru.yandex.practicum.filmorate.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.controller.exception.ValidationException;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final List<User> users = new ArrayList<>();
+    private static int id = 1;
+    private final Map<Integer, User> users = new HashMap<>();
 
     @PostMapping()
-    public void createUser(@RequestBody User user) {
+    public User createUser(@RequestBody User user) {
         log.info("Получен запрос на создание пользователя");
         validation(user);
-        users.add(user);
+        int userId = idGenerator();
+        user.setId(userId);
+        users.put(userId, user);
+        log.info("Пользователь добавлен");
+        return user;
     }
 
     @PutMapping()
-    public void updateUser(@RequestBody User user) {
+    public User updateUser(@RequestBody User user) {
         log.info("Получен запрос на обновление пользователя");
         validation(user);
 
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).equals(user)) {
-                users.set(i, user);
-                return;
-            }
+        if (users.get(user.getId()) == null) {
+            log.warn("Обновление несуществующего пользователя");
+            throw new ValidationException();
         }
+        users.put(user.getId(), user);
+        log.info("Пользователь обновлен");
+        return user;
     }
 
     @GetMapping()
-    public List<User> getUsers() {
+    public Collection<User> getUsers() {
         log.info("Получен запрос на получение пользователей");
-        return users;
+        log.info("Получение пользователей");
+        return users.values();
     }
 
     private void validation(User user) {
         boolean valid = !user.getEmail().contains("@")
-                || user.getName().isBlank()
-                || user.getName().contains(" ")
+                || user.getEmail().isBlank()
+                || user.getLogin().isBlank()
                 || user.getBirthday().isAfter(LocalDate.now());
 
-        boolean valid1 = user.getId() == null
-                || user.getBirthday() == null
-                || user.getLogin() == null
-                || user.getEmail() == null
-                || user.getName() == null;
+        if (user.getName() == null) {
+            user.setName(user.getLogin());
+        }
 
-        if (valid || valid1) {
+        if (valid) {
             log.warn("Ошибка валидации");
             throw new ValidationException();
         }
+    }
+
+    private int idGenerator() {
+        return id++;
     }
 }
