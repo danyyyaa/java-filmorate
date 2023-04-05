@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.validation;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controller.UserController;
@@ -37,7 +36,7 @@ public class UserValidationTests {
     }
 
     @Test
-    public void userTestDefault() {
+    public void userDefaultTest() {
         userController.addUser(user);
         assertEquals(1, userController.getUsers().size());
     }
@@ -97,7 +96,7 @@ public class UserValidationTests {
     }
 
     @Test
-    public void birthdayInFuture() {
+    public void birthdayInFutureTest() {
         user.setBirthday(LocalDate.parse("20-08-2446", DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         assertEquals(1, validator.validate(user).size());
     }
