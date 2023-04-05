@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.controller.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -16,18 +17,19 @@ public class UserController {
     private final Map<Integer, User> users = new HashMap<>();
 
     @PostMapping()
-    public User createUser(@RequestBody User user) {
+    public User createUser(@Valid @RequestBody User user) {
         log.info("Получен запрос на создание пользователя");
         validation(user);
         int userId = idGenerator();
         user.setId(userId);
         users.put(userId, user);
         log.info("Пользователь добавлен");
+
         return user;
     }
 
     @PutMapping()
-    public User updateUser(@RequestBody User user) {
+    public User updateUser(@Valid @RequestBody User user) {
         log.info("Получен запрос на обновление пользователя");
         validation(user);
 
@@ -35,8 +37,10 @@ public class UserController {
             log.warn("Обновление несуществующего пользователя");
             throw new ValidationException();
         }
+
         users.put(user.getId(), user);
         log.info("Пользователь обновлен");
+
         return user;
     }
 
@@ -48,16 +52,11 @@ public class UserController {
     }
 
     private void validation(User user) {
-        boolean valid = !user.getEmail().contains("@")
-                || user.getEmail().isBlank()
-                || user.getLogin().isBlank()
-                || user.getBirthday().isAfter(LocalDate.now());
-
         if (user.getName() == null) {
             user.setName(user.getLogin());
         }
 
-        if (valid) {
+        if (user.getBirthday().isAfter(LocalDate.now())) {
             log.warn("Ошибка валидации");
             throw new ValidationException();
         }
