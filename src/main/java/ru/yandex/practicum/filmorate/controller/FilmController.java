@@ -28,7 +28,7 @@ public class FilmController {
     @PutMapping()
     public Film updateFilm(@Valid @RequestBody Film film) {
         log.info("Получен запрос на добавление фильма");
-        validation(film);
+        releaseDateCheck(film);
 
         if (films.get(film.getId()) == null) {
             log.warn("Обновление несуществующего фильма");
@@ -44,7 +44,7 @@ public class FilmController {
     @PostMapping()
     public Film addFilm(@Valid @RequestBody Film film) {
         log.info("Получен запрос на добавление фильма");
-        validation(film);
+        releaseDateCheck(film);
         int filmId = idGenerator();
         film.setId(filmId);
         films.put(filmId, film);
@@ -53,12 +53,9 @@ public class FilmController {
         return film;
     }
 
-    private void validation(Film film) {
-        boolean valid = film.getDescription().length() >= 200
-                || film.getReleaseDate().isAfter(LocalDate.now())
-                || film.getReleaseDate().
-                isBefore(LocalDate.parse("28-12-1895", DateTimeFormatter.ofPattern("dd-MM-yyyy")))
-                || film.getDuration().getSeconds() < 0;
+    private void releaseDateCheck(Film film) {
+        boolean valid = film.getReleaseDate().
+                isBefore(LocalDate.parse("28-12-1895", DateTimeFormatter.ofPattern("dd-MM-yyyy")));;
 
         if (valid) {
             log.warn("Ошибка валидации");

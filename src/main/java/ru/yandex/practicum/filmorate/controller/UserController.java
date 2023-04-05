@@ -17,9 +17,13 @@ public class UserController {
     private final Map<Integer, User> users = new HashMap<>();
 
     @PostMapping()
-    public User createUser(@Valid @RequestBody User user) {
+    public User addUser(@Valid @RequestBody User user) {
         log.info("Получен запрос на создание пользователя");
-        validation(user);
+
+        if (user.getName() == null) {
+            user.setName(user.getLogin());
+        }
+
         int userId = idGenerator();
         user.setId(userId);
         users.put(userId, user);
@@ -31,11 +35,14 @@ public class UserController {
     @PutMapping()
     public User updateUser(@Valid @RequestBody User user) {
         log.info("Получен запрос на обновление пользователя");
-        validation(user);
 
         if (users.get(user.getId()) == null) {
             log.warn("Обновление несуществующего пользователя");
             throw new ValidationException();
+        }
+
+        if (user.getName() == null) {
+            user.setName(user.getLogin());
         }
 
         users.put(user.getId(), user);
@@ -49,17 +56,6 @@ public class UserController {
         log.info("Получен запрос на получение пользователей");
         log.info("Получение пользователей");
         return users.values();
-    }
-
-    private void validation(User user) {
-        if (user.getName() == null) {
-            user.setName(user.getLogin());
-        }
-
-        if (user.getBirthday().isAfter(LocalDate.now())) {
-            log.warn("Ошибка валидации");
-            throw new ValidationException();
-        }
     }
 
     private int idGenerator() {
