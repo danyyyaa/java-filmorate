@@ -53,10 +53,7 @@ public class FilmController {
                 || film.getReleaseDate().isAfter(LocalDate.now())
                 || film.getReleaseDate().
                 isBefore(LocalDate.parse("28-12-1895", DateTimeFormatter.ofPattern("dd-MM-yyyy")))
-                || film.getDuration().getSeconds() < 0
-                || film.getName() == null
-                || film.getReleaseDate() == null
-                || film.getDescription() == null;
+                || film.getDuration().getSeconds() < 0;
 
         if (valid) {
             log.warn("Ошибка валидации");

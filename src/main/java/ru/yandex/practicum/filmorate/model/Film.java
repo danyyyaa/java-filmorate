@@ -10,6 +10,6 @@ public class Film {
     private int id;
     private final String name;
     private final String description;
-    private final Duration duration;
     private final LocalDate releaseDate;
+    private final Duration duration;
 }
