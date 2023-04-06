@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.controller.exception;
 
 public class ValidationException extends RuntimeException {
 
-    public ValidationException () {
+    public ValidationException() {
         super();
     }
 }
