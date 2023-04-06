@@ -54,8 +54,8 @@ public class FilmController {
     }
 
     private void releaseDateCheck(Film film) {
-        if (film.getReleaseDate().
-                isBefore(LocalDate.parse("28-12-1895", DateTimeFormatter.ofPattern("dd-MM-yyyy")))) {
+        if (film.getReleaseDate()
+                .isBefore(LocalDate.parse("28-12-1895", DateTimeFormatter.ofPattern("dd-MM-yyyy")))) {
             log.warn("Ошибка валидации");
             throw new ValidationException();
         }
