@@ -59,13 +59,13 @@
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
-			<version>5.2.4.Final</version>
+			<version>5.2.5.Final</version>
 			<artifactId>hibernate-validator</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<version>4.13.1</version>
 			<scope>test</scope>
 		</dependency>
 
