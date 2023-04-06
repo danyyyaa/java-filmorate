@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.controller.exception.ValidationException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import javax.validation.Valid;
@@ -56,7 +56,7 @@ public class FilmController {
     private void releaseDateCheck(Film film) {
         if (film.getReleaseDate()
                 .isBefore(LocalDate.parse("28-12-1895", DateTimeFormatter.ofPattern("dd-MM-yyyy")))) {
-            log.warn("Ошибка валидации");
+            log.error("Ошибка валидации");
             throw new ValidationException();
         }
     }

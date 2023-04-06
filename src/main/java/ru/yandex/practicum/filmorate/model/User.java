@@ -6,11 +6,13 @@ import lombok.Data;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 
 @Data
 @Builder
 public class User {
+    @PositiveOrZero
     private int id;
     @Email
     @NotBlank

@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.validation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controller.FilmController;
-import ru.yandex.practicum.filmorate.controller.exception.ValidationException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import javax.validation.Validation;
@@ -92,6 +92,12 @@ public class FilmValidationTests {
     @Test
     public void negativeDurationTest() {
         film.setDuration(Duration.ofSeconds(-200));
+        assertEquals(1, validator.validate(film).size());
+    }
+
+    @Test
+    public void negativeIdTest() {
+        film.setId(-1);
         assertEquals(1, validator.validate(film).size());
     }
 }

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.controller.exception.ValidationException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -101,5 +101,11 @@ public class UserValidationTests {
     public void nullRequestTest() {
         User user = null;
         assertThrows(NullPointerException.class, () -> userController.addUser(user));
+    }
+
+    @Test
+    public void negativeIdTest() {
+        user.setId(-1);
+        assertEquals(1, validator.validate(user).size());
     }
 }
