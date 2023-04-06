@@ -19,36 +19,31 @@ public class FilmController {
 
     @GetMapping()
     public Collection<Film> getFilms() {
-        log.info("Получен запрос на получение фильмов");
         log.info("Получение фильмов");
-
         return films.values();
     }
 
     @PutMapping()
     public Film updateFilm(@Valid @RequestBody Film film) {
-        log.info("Получен запрос на добавление фильма");
         releaseDateCheck(film);
 
         if (films.get(film.getId()) == null) {
-            log.warn("Обновление несуществующего фильма");
+            log.error("Обновление несуществующего фильма");
             throw new ValidationException();
         }
 
         films.put(film.getId(), film);
-        log.info("Фильм обновлен");
+        log.info("Обновлен фильм: " + film);
 
         return film;
     }
 
     @PostMapping()
     public Film addFilm(@Valid @RequestBody Film film) {
-        log.info("Получен запрос на добавление фильма");
         releaseDateCheck(film);
-        int filmId = idGenerator();
-        film.setId(filmId);
-        films.put(filmId, film);
-        log.info("Фильм добавлен");
+        film.setId(id);
+        films.put(id++, film);
+        log.info("Добавлен фильм: " + film);
 
         return film;
     }
@@ -59,9 +54,5 @@ public class FilmController {
             log.error("Ошибка валидации");
             throw new ValidationException();
         }
-    }
-
-    private int idGenerator() {
-        return id++;
     }
 }

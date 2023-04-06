@@ -17,26 +17,21 @@ public class UserController {
 
     @PostMapping()
     public User addUser(@Valid @RequestBody User user) {
-        log.info("Получен запрос на создание пользователя");
-
         if (user.getName() == null) {
             user.setName(user.getLogin());
         }
 
-        int userId = idGenerator();
-        user.setId(userId);
-        users.put(userId, user);
-        log.info("Пользователь добавлен");
+        user.setId(id);
+        users.put(id++, user);
+        log.info("Добавлен пользователь: " + user);
 
         return user;
     }
 
     @PutMapping()
     public User updateUser(@Valid @RequestBody User user) {
-        log.info("Получен запрос на обновление пользователя");
-
         if (users.get(user.getId()) == null) {
-            log.warn("Обновление несуществующего пользователя");
+            log.error("Обновление несуществующего пользователя");
             throw new ValidationException();
         }
 
@@ -45,19 +40,14 @@ public class UserController {
         }
 
         users.put(user.getId(), user);
-        log.info("Пользователь обновлен");
+        log.info("Обновлен пользователь: " + user);
 
         return user;
     }
 
     @GetMapping()
     public Collection<User> getUsers() {
-        log.info("Получен запрос на получение пользователей");
         log.info("Получение пользователей");
         return users.values();
-    }
-
-    private int idGenerator() {
-        return id++;
     }
 }
