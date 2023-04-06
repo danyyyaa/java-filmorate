@@ -26,8 +26,8 @@ public class UserValidationTests {
                 .email("mail@email.ru")
                 .login("abc")
                 .birthday(LocalDate.parse("11-11-2011", DateTimeFormatter.ofPattern("dd-MM-yyyy")))
-                .name("Sanya").
-                build();
+                .name("Sanya")
+                .build();
 
         userController = new UserController();
     }
