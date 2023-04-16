@@ -24,5 +24,14 @@ public class User {
     private String name;
     @PastOrPresent
     private LocalDate birthday;
-    Set<Long> friendId;
+    @PositiveOrZero
+    Set<Long> friendsId;
+
+    public void addFriend(long id) {
+        friendsId.add(id);
+    }
+
+    public void unfriend(long id) {
+        friendsId.remove(id);
+    }
 }

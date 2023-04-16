@@ -33,8 +33,8 @@ public class UserController {
     }
 
     @PostMapping
-    public User addFriend(User user) {
-        return userService.addFriend(user);
+    public User addFriend(User user1, User user2) {
+        return userService.addFriend(user1, user2);
     }
 
     @DeleteMapping
@@ -43,7 +43,7 @@ public class UserController {
     }
 
     @GetMapping
-    public Collection<User> getMutualFriend() {
-        return userService.getMutualFriend();
+    public Collection<User> getMutualFriends(User user1, User user2) {
+        return userService.getMutualFriends(user1, user2);
     }
 }

@@ -29,4 +29,12 @@ public class Film {
     private Duration duration;
     @PositiveOrZero
     private Set<Long> likes;
+
+    public void addLike(long id) {
+        likes.add(id);
+    }
+
+    public void removeLike(long id) {
+        likes.remove(id);
+    }
 }
