@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.time.DurationMin;
 import javax.validation.constraints.*;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Builder
 @Getter
@@ -26,4 +27,6 @@ public class Film {
     private LocalDate releaseDate;
     @DurationMin(nanos = 1)
     private Duration duration;
+    @PositiveOrZero
+    private Set<Long> likes;
 }

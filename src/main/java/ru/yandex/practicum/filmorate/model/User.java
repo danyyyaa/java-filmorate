@@ -7,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Builder
 @Getter
@@ -23,4 +24,5 @@ public class User {
     private String name;
     @PastOrPresent
     private LocalDate birthday;
+    Set<Long> friendId;
 }
