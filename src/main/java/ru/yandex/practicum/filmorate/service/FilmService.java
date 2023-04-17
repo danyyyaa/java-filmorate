@@ -2,14 +2,13 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -17,22 +16,27 @@ import java.util.stream.Collectors;
 public class FilmService implements FilmStorage {
     private final InMemoryFilmStorage inMemoryFilmStorage;
 
-    public Film addLike(Film film) {
-        film.addLike(film.getId());
-        return film;
+    public Film getFilmById(long id) {
+        if (!inMemoryFilmStorage.getMap().containsKey(id)) {
+            throw new FilmNotFoundException("Film not found.");
+        }
+        return inMemoryFilmStorage.getMap().get(id);
     }
 
-    public Film unlike(Film film) {
-        film.removeLike(film.getId());
-        return film;
+    public void addLike(int id, int userId) {
+        inMemoryFilmStorage.getMap().get(id).addLike(userId);
     }
 
-    public Collection<Film> getMostPopularFilms() {
+    public void unlike(int id, int userId) {
+        inMemoryFilmStorage.getMap().get(id).removeLike(userId);
+    }
+
+    public Collection<Film> getMostPopularFilms(int count) {
         return inMemoryFilmStorage
                 .getFilms()
                 .stream()
                 .sorted(Comparator.comparingLong(f -> f.getLikes().size()))
-                .limit(10)
+                .limit(count)
                 .collect(Collectors.toSet());
     }
 

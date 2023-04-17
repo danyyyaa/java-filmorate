@@ -20,8 +20,11 @@ public class FilmController {
     private final FilmService filmService;
 
     @GetMapping()
-    public Collection<Film> getFilms() {
-        return filmService.getFilms();
+    public Collection<Film> getFilms(@RequestParam(required = false) Long id) {
+        if (id == null) {
+            return filmService.getFilms();
+        }
+        return Collections.singleton(filmService.getFilmById(id));
     }
 
     @PutMapping()
@@ -34,18 +37,20 @@ public class FilmController {
         return filmService.addFilm(film);
     }
 
-    @PostMapping
-    public Film addLike(Film film) {
-        return filmService.addLike(film);
+    @PutMapping("/{id}/like/{userId}")
+    public void addLike(@PathVariable int id, @PathVariable int userId) {
+        filmService.addLike(id, userId);
     }
 
-    @DeleteMapping
-    public Film unlike(Film film) {
-        return filmService.unlike(film);
+    @DeleteMapping("/{id}/like/{userId}")
+    public void unlike(@PathVariable int id, @PathVariable int userId) {
     }
 
-    @GetMapping
-    public Collection<Film> getMostPopularFilms() {
-        return filmService.getMostPopularFilms();
+    @GetMapping("/popular?count={count}")
+    public Collection<Film> getMostPopularFilms(@PathVariable Optional<Integer> count) {
+        if (count.isPresent()) {
+            return filmService.getMostPopularFilms(count.get());
+        }
+        return filmService.getMostPopularFilms(10);
     }
 }

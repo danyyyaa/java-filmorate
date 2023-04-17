@@ -27,7 +27,6 @@ public class Film {
     private LocalDate releaseDate;
     @DurationMin(nanos = 1)
     private Duration duration;
-    @PositiveOrZero
     private Set<Long> likes;
 
     public void addLike(long id) {

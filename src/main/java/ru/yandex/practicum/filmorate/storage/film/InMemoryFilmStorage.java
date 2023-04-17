@@ -48,6 +48,10 @@ public class InMemoryFilmStorage implements FilmStorage {
         return film;
     }
 
+    public Map<Integer, Film> getMap() {
+        return films;
+    }
+
     private void releaseDateCheck(Film film) {
         if (film.getReleaseDate()
                 .isBefore(LocalDate.parse("28-12-1895", DateTimeFormatter.ofPattern("dd-MM-yyyy")))) {
