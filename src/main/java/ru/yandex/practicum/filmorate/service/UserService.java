@@ -28,12 +28,12 @@ public class UserService implements UserStorage {
     }
 
     public Collection<User> getMutualFriends(User user1, User user2) {
-        /*return user1
+        return user1
                 .getFriendsId()
                 .stream()
                 .filter(user2.getFriendsId()::contains)
-                .collect(Collectors.toList());*/
-        return null;
+                .map(inMemoryUserStorage.getMap()::get)
+                .collect(Collectors.toList());
     }
 
     @Override

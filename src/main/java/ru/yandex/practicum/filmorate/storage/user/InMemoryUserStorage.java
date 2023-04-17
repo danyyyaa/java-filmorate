@@ -52,4 +52,8 @@ public class InMemoryUserStorage implements UserStorage {
         log.info("Получение пользователей");
         return users.values();
     }
+
+    public Map<Integer, User> getMap() {
+        return users;
+    }
 }
