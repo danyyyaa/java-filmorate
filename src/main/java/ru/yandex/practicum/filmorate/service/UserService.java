@@ -14,62 +14,64 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class UserService implements UserStorage {
-    //private final UserStorage inMemoryUserStorage = new InMemoryUserStorage();
-    private final InMemoryUserStorage inMemoryUserStorage;
+public class UserService implements UserServiceInterface {
+    private final UserStorage userStorage = new InMemoryUserStorage();
 
-    public void addFriend(int id, int friendId) {
-        inMemoryUserStorage.getMap().get(id).addFriend(friendId);
-        inMemoryUserStorage.getMap().get(friendId).addFriend(id);
+    @Override
+    public void addFriend(long id, long friendId) {
+        userStorage.getUserById(id).addFriend(friendId);
+        userStorage.getUserById(friendId).addFriend(id);
     }
 
-    public User getUserById(int id) {
-        if (!inMemoryUserStorage.getMap().containsKey(id)) {
+    @Override
+    public User getUserById(long id) {
+        if (userStorage.getUserById(id) == null) {
             log.error("Ошибка, пользователь " + id + " не найден.");
             throw new UserNotFoundException("User not found.");
         }
-        log.info("Получен пользователь: " + inMemoryUserStorage.getMap().get(id));
-        return inMemoryUserStorage.getMap().get(id);
-    }
-
-    public Collection<User> getFriends(int id) {
-        return inMemoryUserStorage
-                .getMap()
-                .get(id)
-                .getFriendsId()
-                .stream()
-                .map(inMemoryUserStorage.getMap()::get)
-                .collect(Collectors.toSet());
-    }
-
-    public void unfriend(int id, int friendId) {
-        inMemoryUserStorage.getMap().get(id).unfriend(friendId);
-        inMemoryUserStorage.getMap().get(friendId).unfriend(id);
-    }
-
-    public Collection<User> getMutualFriends(int id, int otherId) {
-        return inMemoryUserStorage.
-                getMap()
-                .get(id)
-                .getFriendsId()
-                .stream()
-                .filter(inMemoryUserStorage.getMap().get(otherId).getFriendsId()::contains)
-                .map(inMemoryUserStorage.getMap()::get)
-                .collect(Collectors.toSet());
+        log.info("Получен пользователь: " + userStorage.getUserById(id));
+        return userStorage.getUserById(id);
     }
 
     @Override
     public User addUser(User user) {
-        return inMemoryUserStorage.addUser(user);
+        return userStorage.addUser(user);
+    }
+
+    @Override
+    public Collection<User> getFriends(long id) {
+        return userStorage
+                .getUserById(id)
+                .getFriendsId()
+                .stream()
+                .map(userStorage::getUserById)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public void unfriend(long id, long friendId) {
+        userStorage.getUserById(id).unfriend(friendId);
+        userStorage.getUserById(friendId).unfriend(id);
+    }
+
+    @Override
+    public Collection<User> getCommonFriends(long id, long otherId) {
+        return userStorage
+                .getUserById(id)
+                .getFriendsId()
+                .stream()
+                .filter(userStorage.getUserById(otherId).getFriendsId()::contains)
+                .map(userStorage::getUserById)
+                .collect(Collectors.toSet());
     }
 
     @Override
     public User updateUser(User user) {
-        return inMemoryUserStorage.updateUser(user);
+        return userStorage.updateUser(user);
     }
 
     @Override
     public Collection<User> getUsers() {
-        return inMemoryUserStorage.getUsers();
+        return userStorage.getUsers();
     }
 }

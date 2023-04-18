@@ -1,9 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.time.DurationMin;
 
@@ -18,7 +15,7 @@ import java.util.Set;
 @ToString
 public class Film {
     @PositiveOrZero
-    private int id;
+    private long id;
     @NotBlank
     private String name;
     @Length(max = 200)

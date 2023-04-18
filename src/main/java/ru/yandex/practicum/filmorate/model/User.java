@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 
 @Builder
@@ -13,7 +12,7 @@ import java.util.Set;
 @ToString
 public class User {
     @PositiveOrZero
-    private int id;
+    private long id;
     @Email
     @NotBlank
     private String email;

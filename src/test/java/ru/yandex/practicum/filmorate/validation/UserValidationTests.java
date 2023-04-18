@@ -34,7 +34,7 @@ public class UserValidationTests {
                 .name("Sanya")
                 .build();
 
-        userController = new UserController(new UserService(new InMemoryUserStorage()));
+        userController = new UserController(new UserService());
     }
 
     @Test
