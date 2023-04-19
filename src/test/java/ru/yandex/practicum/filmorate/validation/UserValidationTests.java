@@ -25,7 +25,7 @@ public class UserValidationTests {
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private final Validator validator = factory.getValidator();
 
-    @BeforeEach
+    /*@BeforeEach
     public void setUp() {
         user = User.builder()
                 .email("mail@email.ru")
@@ -35,7 +35,7 @@ public class UserValidationTests {
                 .build();
 
         userController = new UserController(new UserService());
-    }
+    }*/
 
     @Test
     public void userDefaultTest() {

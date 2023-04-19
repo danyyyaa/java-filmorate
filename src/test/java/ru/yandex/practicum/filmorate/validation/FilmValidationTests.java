@@ -25,12 +25,13 @@ public class FilmValidationTests {
 
     @BeforeEach
     public void setUp() {
-        film = Film.builder()
+        /*film = Film.builder()
                 .name("aaa")
                 .description("bbb")
                 .releaseDate(LocalDate.parse("11-11-2011", DateTimeFormatter.ofPattern("dd-MM-yyyy")))
                 .duration(Duration.ofMinutes(120))
-                .build();
+                .build();*/
+
 
         filmController = new FilmController(new FilmService(new InMemoryFilmStorage()));
     }

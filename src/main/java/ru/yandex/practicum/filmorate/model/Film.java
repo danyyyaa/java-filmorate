@@ -4,12 +4,14 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.time.DurationMin;
 
+import javax.validation.ValidationException;
 import javax.validation.constraints.*;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
-@Builder
+//@Builder
 @Getter
 @Setter
 @ToString
@@ -24,9 +26,12 @@ public class Film {
     private LocalDate releaseDate;
     @DurationMin(nanos = 1)
     private Duration duration;
-    private Set<Long> likes;
+    private Set<Long> likes = new HashSet<>();
 
     public void addLike(long id) {
+        if (id < 1) {
+            throw new ValidationException();
+        }
         likes.add(id);
     }
 

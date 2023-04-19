@@ -2,11 +2,13 @@ package ru.yandex.practicum.filmorate.model;
 
 import lombok.*;
 
+import javax.validation.ValidationException;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
-@Builder
+//@Builder
 @Getter
 @Setter
 @ToString
@@ -21,9 +23,12 @@ public class User {
     private String name;
     @PastOrPresent
     private LocalDate birthday;
-    private Set<Long> friendsId;
+    private Set<Long> friendsId = new HashSet<>();
 
     public void addFriend(long id) {
+        if (id < 1) {
+            throw new ValidationException();
+        }
         friendsId.add(id);
     }
 

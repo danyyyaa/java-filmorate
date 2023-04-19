@@ -43,6 +43,7 @@ public class FilmController {
 
     @DeleteMapping("/{id}/like/{userId}")
     public void unlike(@PathVariable int id, @PathVariable int userId) {
+        filmService.unlike(id, userId);
     }
 
     @GetMapping("/popular")
