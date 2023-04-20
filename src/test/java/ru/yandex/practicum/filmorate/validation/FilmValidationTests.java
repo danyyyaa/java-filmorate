@@ -76,7 +76,6 @@ public class FilmValidationTests {
     public void releaseDateIsBefore28_1895Test() {
         film.setReleaseDate(LocalDate.parse("28-12-1894", DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         assertThrows(FilmNotFoundException.class, () -> filmController.updateFilm(film));
-
     }
 
     @Test
