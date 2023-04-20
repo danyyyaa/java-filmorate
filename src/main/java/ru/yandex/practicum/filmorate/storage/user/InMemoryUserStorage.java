@@ -16,7 +16,7 @@ public class InMemoryUserStorage implements UserStorage {
     private final Map<Long, User> users = new HashMap<>();
 
     @Override
-    public User addUser(User user) {
+    public User createUser(User user) {
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
@@ -55,7 +55,7 @@ public class InMemoryUserStorage implements UserStorage {
     public User getUserById(long id) {
         if (!users.containsKey(id)) {
             log.error("Получение несуществующего пользователя: " + id);
-            throw new UserNotFoundException("Ошибка, пользователь " + id + " не найден.");
+            throw new UserNotFoundException();
         }
         return users.get(id);
     }

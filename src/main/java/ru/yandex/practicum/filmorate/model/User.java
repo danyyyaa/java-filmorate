@@ -1,8 +1,8 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.*;
+import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 
-import javax.validation.ValidationException;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -34,7 +34,7 @@ public class User {
 
     public void addFriend(long id) {
         if (id < 1) {
-            throw new ValidationException();
+            throw new UserNotFoundException();
         }
         friendsId.add(id);
     }

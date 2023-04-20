@@ -17,8 +17,8 @@ public class UserController {
     private final UserServiceInterface userService;
 
     @PostMapping()
-    public User addUser(@Valid @RequestBody User user) {
-        return userService.addUser(user);
+    public User createUser(@Valid @RequestBody User user) {
+        return userService.createUser(user);
     }
 
     @PutMapping()

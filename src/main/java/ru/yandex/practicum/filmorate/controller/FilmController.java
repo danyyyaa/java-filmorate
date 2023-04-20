@@ -27,8 +27,8 @@ public class FilmController {
     }
 
     @PostMapping()
-    public Film addFilm(@Valid @RequestBody Film film) {
-        return filmService.addFilm(film);
+    public Film createFilm(@Valid @RequestBody Film film) {
+        return filmService.createFilm(film);
     }
 
     @GetMapping("/{id}")

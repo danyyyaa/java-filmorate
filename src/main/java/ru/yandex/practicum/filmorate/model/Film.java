@@ -3,9 +3,9 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.time.DurationMin;
+import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.validation.After;
 
-import javax.validation.ValidationException;
 import javax.validation.constraints.*;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -38,12 +38,15 @@ public class Film {
 
     public void addLike(long id) {
         if (id < 1) {
-            throw new ValidationException();
+            throw new UserNotFoundException();
         }
         likes.add(id);
     }
 
     public void removeLike(long id) {
+        if (id < 1) {
+            throw new UserNotFoundException();
+        }
         likes.remove(id);
     }
 }

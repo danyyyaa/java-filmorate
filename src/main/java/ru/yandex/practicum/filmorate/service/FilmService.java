@@ -50,7 +50,7 @@ public class FilmService implements FilmServiceInterface {
     }
 
     @Override
-    public Film addFilm(Film film) {
-        return filmStorage.addFilm(film);
+    public Film createFilm(Film film) {
+        return filmStorage.createFilm(film);
     }
 }

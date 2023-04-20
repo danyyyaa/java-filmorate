@@ -13,7 +13,7 @@ import ru.yandex.practicum.filmorate.model.ErrorResponse;
 public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse  handleValidationException(final ValidationException e) {
+    public ErrorResponse handleValidationException(final ValidationException e) {
         return new ErrorResponse(e.getMessage());
     }
 
@@ -28,7 +28,4 @@ public class ErrorHandler {
     public ErrorResponse handleThrowable(final Throwable e) {
         return new ErrorResponse("Произошла непредвиденная ошибка.");
     }
-
-
-
 }

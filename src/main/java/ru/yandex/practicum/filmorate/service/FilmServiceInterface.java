@@ -11,5 +11,5 @@ public interface FilmServiceInterface {
     Collection<Film> getMostPopularFilms(long count);
     Collection<Film> getFilms();
     Film updateFilm(Film film);
-    Film addFilm(Film film);
+    Film createFilm(Film film);
 }

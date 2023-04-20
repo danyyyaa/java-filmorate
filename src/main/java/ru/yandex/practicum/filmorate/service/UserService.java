@@ -32,8 +32,8 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public User addUser(User user) {
-        return userStorage.addUser(user);
+    public User createUser(User user) {
+        return userStorage.createUser(user);
     }
 
     @Override

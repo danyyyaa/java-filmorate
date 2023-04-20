@@ -10,7 +10,7 @@ public interface UserServiceInterface {
     Collection<User> getFriends(long id);
     void unfriend(long id, long friendId);
     Collection<User> getCommonFriends(long id, long otherId);
-    User addUser(User user);
+    User createUser(User user);
     User updateUser(User user);
     Collection<User> getUsers();
 }

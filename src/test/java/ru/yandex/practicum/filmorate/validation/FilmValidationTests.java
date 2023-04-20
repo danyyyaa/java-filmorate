@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controller.FilmController;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
@@ -16,7 +15,6 @@ import javax.validation.ValidatorFactory;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,28 +26,20 @@ public class FilmValidationTests {
 
     @BeforeEach
     public void setUp() {
-        /*film = Film.builder()
-                .name("aaa")
-                .description("bbb")
-                .releaseDate(LocalDate.parse("11-11-2011", DateTimeFormatter.ofPattern("dd-MM-yyyy")))
-                .duration(Duration.ofMinutes(120))
-                .build();*/
         film = new Film(1, "name", "aa", LocalDate.of(2002, 2, 2), Duration.ofMinutes(2));
-
-
         filmController = new FilmController(new FilmService(new InMemoryFilmStorage(), new InMemoryUserStorage()));
     }
 
     @Test
     public void filmDefaultTest() {
-        filmController.addFilm(film);
+        filmController.createFilm(film);
         assertEquals(1, filmController.getFilms().size());
     }
 
     @Test
     public void nullRequestTest() {
         Film film = null;
-        assertThrows(NullPointerException.class, () -> filmController.addFilm(film));
+        assertThrows(NullPointerException.class, () -> filmController.createFilm(film));
 
     }
 

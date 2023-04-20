@@ -29,21 +29,13 @@ public class UserValidationTests {
 
     @BeforeEach
     public void setUp() {
-        /*user = User.builder()
-                .email("mail@email.ru")
-                .login("abc")
-                .birthday(LocalDate.parse("11-11-2011", DateTimeFormatter.ofPattern("dd-MM-yyyy")))
-                .name("Sanya")
-                .build();*/
-
         user = new User(1, "aa", "abc", "cc", LocalDate.of(2002, 11, 11));
-
         userController = new UserController(new UserService());
     }
 
     @Test
     public void userDefaultTest() {
-        userController.addUser(user);
+        userController.createUser(user);
         assertEquals(1, userController.getUsers().size());
     }
 
@@ -73,18 +65,15 @@ public class UserValidationTests {
     @Test
     public void blankLoginTest() {
         user.setLogin("");
-        //assertEquals(1, validator.validate(user).size());
         assertEquals(2, validator.validate(user).size());
 
         user.setLogin(" ");
-        //assertEquals(1, validator.validate(user).size());
         assertEquals(2, validator.validate(user).size());
     }
 
     @Test
     public void nullLoginTest() {
         user.setLogin(null);
-        //assertEquals(1, validator.validate(user).size());
         assertEquals(2, validator.validate(user).size());
     }
 
@@ -106,20 +95,18 @@ public class UserValidationTests {
     @Test
     public void birthdayInFutureTest() {
         user.setBirthday(LocalDate.parse("20-08-2446", DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-        //assertEquals(1, validator.validate(user).size());
         assertEquals(2, validator.validate(user).size());
     }
 
     @Test
     public void nullRequestTest() {
         User user = null;
-        assertThrows(NullPointerException.class, () -> userController.addUser(user));
+        assertThrows(NullPointerException.class, () -> userController.createUser(user));
     }
 
     @Test
     public void negativeIdTest() {
         user.setId(-1);
-        //assertEquals(1, validator.validate(user).size());
         assertEquals(2, validator.validate(user).size());
     }
 }
