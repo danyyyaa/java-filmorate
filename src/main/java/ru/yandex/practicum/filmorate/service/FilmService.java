@@ -19,14 +19,14 @@ public class FilmService implements FilmServiceInterface {
     private final UserStorage userStorage;
 
     public Film getFilmById(long id) {
-        return filmStorage.getFilmById(id) ;
+        return filmStorage.getFilmById(id);
     }
 
     public void addLike(long id, long userId) {
         filmStorage.getFilmById(id).addLike(userStorage.getUserById(userId).getId());
     }
 
-    public void unlike(long  id, long  userId) {
+    public void unlike(long id, long userId) {
         filmStorage.getFilmById(id).removeLike(userStorage.getUserById(userId).getId());
     }
 
