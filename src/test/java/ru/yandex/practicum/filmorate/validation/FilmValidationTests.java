@@ -40,7 +40,6 @@ public class FilmValidationTests {
     public void nullRequestTest() {
         Film film = null;
         assertThrows(NullPointerException.class, () -> filmController.createFilm(film));
-
     }
 
     @Test
