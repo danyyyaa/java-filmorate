@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-//@Builder
 @Getter
 @Setter
 @ToString
@@ -24,6 +23,14 @@ public class User {
     @PastOrPresent
     private LocalDate birthday;
     private Set<Long> friendsId = new HashSet<>();
+
+    public User(long id, String email, String login, String name, LocalDate birthday) {
+        this.id = id;
+        this.email = email;
+        this.login = login;
+        this.name = name;
+        this.birthday = birthday;
+    }
 
     public void addFriend(long id) {
         if (id < 1) {

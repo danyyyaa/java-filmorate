@@ -2,15 +2,11 @@ package ru.yandex.practicum.filmorate.storage.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestBody;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import javax.validation.Valid;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 @Component
@@ -35,7 +31,7 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public User updateUser(User user) {
         if (users.get(user.getId()) == null) {
-            log.error("Обновление несуществующего пользователя");
+            log.error("Обновление несуществующего пользователя: " + user);
             throw new UserNotFoundException("Обновление несуществующего пользователя");
         }
 
@@ -43,7 +39,6 @@ public class InMemoryUserStorage implements UserStorage {
             user.setName(user.getLogin());
         }
 
-        //user.setFriendsId(new HashSet<>());
         users.put(user.getId(), user);
         log.info("Обновлен пользователь: " + user);
 
@@ -52,7 +47,7 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public Collection<User> getUsers() {
-        log.info("Получение пользователей");
+        log.info("Получение пользователей: " + users.values());
         return users.values();
     }
 

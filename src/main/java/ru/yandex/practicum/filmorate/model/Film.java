@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.time.DurationMin;
+import ru.yandex.practicum.filmorate.validation.After;
 
 import javax.validation.ValidationException;
 import javax.validation.constraints.*;
@@ -11,7 +12,6 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-//@Builder
 @Getter
 @Setter
 @ToString
@@ -22,11 +22,19 @@ public class Film {
     private String name;
     @Length(max = 200)
     private String description;
-    @PastOrPresent
+    @After("1895-12-28")
     private LocalDate releaseDate;
     @DurationMin(nanos = 1)
     private Duration duration;
     private Set<Long> likes = new HashSet<>();
+
+    public Film(long id, String name, String description, LocalDate releaseDate, Duration duration) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+    }
 
     public void addLike(long id) {
         if (id < 1) {
