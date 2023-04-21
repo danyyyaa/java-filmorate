@@ -86,7 +86,7 @@ public class FilmValidationTests {
 
     @Test
     public void negativeIdTest() {
-        film.setId(-1);
+        film.setId(-1L);
         assertEquals(1, validator.validate(film).size());
     }
 }
