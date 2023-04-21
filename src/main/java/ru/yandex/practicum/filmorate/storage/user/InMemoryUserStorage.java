@@ -5,9 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Component
 @Slf4j
@@ -30,18 +28,9 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User updateUser(User user) {
-        if (users.get(user.getId()) == null) {
-            log.error("Обновление несуществующего пользователя: " + user);
-            throw new UserNotFoundException("Обновление несуществующего пользователя");
-        }
-
-        if (user.getName() == null) {
-            user.setName(user.getLogin());
-        }
-
+        getUserById(user.getId());
         users.put(user.getId(), user);
-        log.info("Обновлен пользователь: " + user);
-
+        log.info("Данные о пользователе {} обновлены.", user.getName());
         return user;
     }
 
@@ -53,10 +42,21 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User getUserById(long id) {
-        if (!users.containsKey(id)) {
-            log.error("Получение несуществующего пользователя: " + id);
-            throw new UserNotFoundException();
+        User user = users.get(id);
+        if (user != null) {
+            return user;
         }
-        return users.get(id);
+        throw new UserNotFoundException(
+                String.format("Пользователь с таким id %s не существует", id));
+    }
+
+    @Override
+    public Collection<User> getUsersByIds(Collection<Long> ids) {
+        List<User> result = new ArrayList<>();
+        for (long id : ids) {
+            User user = getUserById(id);
+            result.add(user);
+        }
+        return result;
     }
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
@@ -23,18 +24,23 @@ public class FilmService implements FilmServiceInterface {
     }
 
     public void addLike(long id, long userId) {
-        filmStorage.getFilmById(id).addLike(userStorage.getUserById(userId).getId());
+        Film film = filmStorage.getFilmById(id);
+        User user = userStorage.getUserById(userId);
+        film.getLikes().add(user.getId());
     }
 
     public void unlike(long id, long userId) {
-        filmStorage.getFilmById(id).removeLike(userStorage.getUserById(userId).getId());
+        Film film = filmStorage.getFilmById(id);
+        User user = userStorage.getUserById(userId);
+        film.getLikes().remove(user.getId());
     }
 
-    public Collection<Film> getMostPopularFilms(long count) {
+    public Collection<Film> getMostPopularFilms(Integer count) {
+        Comparator<Film> comparator = Comparator.comparingInt(f -> f.getLikes().size());
         return filmStorage
                 .getFilms()
                 .stream()
-                .sorted(Comparator.comparingLong(f -> f.getLikes().size()))
+                .sorted(comparator.reversed())
                 .limit(count)
                 .collect(Collectors.toSet());
     }

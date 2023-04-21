@@ -3,27 +3,25 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.Collection;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class UserService implements UserServiceInterface {
-    private final UserStorage userStorage = new InMemoryUserStorage();
+    private final UserStorage userStorage;
 
     @Override
     public void addFriend(long id, long friendId) {
-        if (id < 1 || friendId < 1) {
-            throw new UserNotFoundException();
-        }
-        userStorage.getUserById(id).addFriend(friendId);
-        userStorage.getUserById(friendId).addFriend(id);
+        User user = userStorage.getUserById(id);
+        User friend = userStorage.getUserById(friendId);
+        user.getFriendsId().add(friend.getId());
+        friend.getFriendsId().add(user.getId());
     }
 
     @Override
@@ -38,29 +36,27 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public Collection<User> getFriends(long id) {
-        return userStorage
-                .getUserById(id)
-                .getFriendsId()
-                .stream()
-                .map(userStorage::getUserById)
-                .collect(Collectors.toSet());
+        User user = userStorage.getUserById(id);
+        Set<Long> friendIds = user.getFriendsId();
+        return userStorage.getUsersByIds(friendIds);
     }
 
     @Override
     public void unfriend(long id, long friendId) {
-        userStorage.getUserById(id).unfriend(friendId);
-        userStorage.getUserById(friendId).unfriend(id);
+        User user = userStorage.getUserById(id);
+        User friend = userStorage.getUserById(friendId);
+        user.getFriendsId().remove(friend.getId());
+        friend.getFriendsId().remove(user.getId());
     }
 
     @Override
     public Collection<User> getCommonFriends(long id, long otherId) {
-        return userStorage
-                .getUserById(id)
-                .getFriendsId()
-                .stream()
-                .filter(userStorage.getUserById(otherId).getFriendsId()::contains)
-                .map(userStorage::getUserById)
-                .collect(Collectors.toSet());
+        User user1 = userStorage.getUserById(id);
+        User user2 = userStorage.getUserById(otherId);
+        Set<Long> friend1Ids = user1.getFriendsId();
+        Set<Long> friend2Ids = user2.getFriendsId();
+        Set<Long> commonFriendIds = findCommonElements(friend1Ids, friend2Ids);
+        return userStorage.getUsersByIds(commonFriendIds);
     }
 
     @Override
@@ -71,5 +67,9 @@ public class UserService implements UserServiceInterface {
     @Override
     public Collection<User> getUsers() {
         return userStorage.getUsers();
+    }
+
+    private static <T> Set<T> findCommonElements(Collection<T> first, Collection<T> second) {
+        return first.stream().filter(second::contains).collect(Collectors.toSet());
     }
 }

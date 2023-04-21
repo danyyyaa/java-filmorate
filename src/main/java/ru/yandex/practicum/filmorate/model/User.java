@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.*;
-import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
@@ -13,7 +12,7 @@ import java.util.Set;
 @ToString
 public class User {
     @PositiveOrZero
-    private long id;
+    private Long id;
     @Email
     @NotBlank
     private String email;
@@ -30,16 +29,5 @@ public class User {
         this.login = login;
         this.name = name;
         this.birthday = birthday;
-    }
-
-    public void addFriend(long id) {
-        if (id < 1) {
-            throw new UserNotFoundException();
-        }
-        friendsId.add(id);
-    }
-
-    public void unfriend(long id) {
-        friendsId.remove(id);
     }
 }
