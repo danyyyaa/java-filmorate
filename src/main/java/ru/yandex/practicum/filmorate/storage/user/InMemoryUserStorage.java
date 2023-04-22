@@ -1,13 +1,17 @@
 package ru.yandex.practicum.filmorate.storage.user;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
-@Component
+@Repository
 @Slf4j
 public class InMemoryUserStorage implements UserStorage {
     private static long id = 1L;
@@ -28,9 +32,10 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User updateUser(User user) {
-        getUserById(user.getId());
+        if (!isExist(user.getId())) {
+            throw new UserNotFoundException();
+        }
         users.put(user.getId(), user);
-        log.info("Данные о пользователе {} обновлены.", user.getName());
         return user;
     }
 
@@ -41,22 +46,26 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User getUserById(long id) {
-        User user = users.get(id);
-        if (user != null) {
-            return user;
+    public User getUserById(long userId) {
+        if (!isExist(userId)) {
+            throw new UserNotFoundException();
         }
-        throw new UserNotFoundException(
-                String.format("Пользователь с таким id %s не существует", id));
+        return users.get(userId);
     }
 
     @Override
     public Collection<User> getUsersByIds(Collection<Long> ids) {
         List<User> result = new ArrayList<>();
         for (long id : ids) {
-            User user = getUserById(id);
-            result.add(user);
+            if (!isExist(id)) {
+                throw new UserNotFoundException();
+            }
+            result.add(users.get(id));
         }
         return result;
+    }
+
+    private boolean isExist(long userId) {
+        return users.containsKey(userId);
     }
 }

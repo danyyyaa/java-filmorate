@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.service.UserServiceImpl;
 import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 
 import javax.validation.Validation;
@@ -25,7 +25,7 @@ public class UserValidationTests {
     @BeforeEach
     public void setUp() {
         user = new User(1, "aa", "abc", "cc", LocalDate.of(2002, 11, 11));
-        userController = new UserController(new UserService(new InMemoryUserStorage()));
+        userController = new UserController(new UserServiceImpl(new InMemoryUserStorage()));
     }
 
     @Test

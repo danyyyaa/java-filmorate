@@ -1,62 +1,21 @@
 package ru.yandex.practicum.filmorate.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.Collection;
-import java.util.Comparator;
-import java.util.stream.Collectors;
 
-@Slf4j
-@Service
-@RequiredArgsConstructor
-public class FilmService implements FilmServiceInterface {
-    private final FilmStorage filmStorage;
-    private final UserStorage userStorage;
+public interface FilmService {
+    Film getFilmById(long id);
 
-    public Film getFilmById(long id) {
-        return filmStorage.getFilmById(id);
-    }
+    void addLike(long filmId, long userId);
 
-    public void addLike(long id, long userId) {
-        Film film = filmStorage.getFilmById(id);
-        User user = userStorage.getUserById(userId);
-        film.getLikes().add(user.getId());
-    }
+    void unlike(long filmId, long userId);
 
-    public void unlike(long id, long userId) {
-        Film film = filmStorage.getFilmById(id);
-        User user = userStorage.getUserById(userId);
-        film.getLikes().remove(user.getId());
-    }
+    Collection<Film> getMostPopularFilms(Integer count);
 
-    public Collection<Film> getMostPopularFilms(Integer count) {
-        Comparator<Film> comparator = Comparator.comparingInt(f -> f.getLikes().size());
-        return filmStorage
-                .getFilms()
-                .stream()
-                .sorted(comparator.reversed())
-                .limit(count)
-                .collect(Collectors.toSet());
-    }
+    Collection<Film> getFilms();
 
-    @Override
-    public Collection<Film> getFilms() {
-        return filmStorage.getFilms();
-    }
+    Film updateFilm(Film film);
 
-    @Override
-    public Film updateFilm(Film film) {
-        return filmStorage.updateFilm(film);
-    }
-
-    @Override
-    public Film createFilm(Film film) {
-        return filmStorage.createFilm(film);
-    }
+    Film createFilm(Film film);
 }
