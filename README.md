@@ -102,6 +102,14 @@
  WHERE id = ?
  ```
  
+ возвращает список пользователей, являющихся его друзьями
+ ```sql
+ SELECT
+ FROM friendship AS f
+ INNER JOIN user AS u ON u.user_id = f.friend_id
+ WHERE f.user_id = ?
+ ```
+ 
 
  2. Фильмы
  получение списка всех фильмов
@@ -117,6 +125,17 @@
  SELECT *
  FROM film
  WHERE id = ?
+ ```
+ 
+ возвращает список из первых count фильмов по количеству лайков
+ ```sql
+SELECT f.*, mp.name, COUNT(fl.user_id) AS rate
+FROM film AS f
+LEFT JOIN mpa_rating AS mp ON f.mpa_rating_id = mp.id
+LEFT JOIN film_like AS fl ON f.id = fl.film_id
+GROUP BY f.id
+ORDER BY rate DESC, f.id
+LIMIT ?
  ```
  
  
