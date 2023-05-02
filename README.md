@@ -1,7 +1,7 @@
 # java-filmorate
 
 
-Технологии: Java + Spring Boot + Maven + Lombok + JUnit + RESTful API + PostgreSQL
+Технологии: Java + Spring Boot + Maven + Lombok + JUnit + RESTful API + PostgreSQL + JDBC
 
 
 Данный проект представляет собой бэкенд для сервиса, который работает с фильмами и оценками пользователей и рекомендует фильмы к просмотру.
