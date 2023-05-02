@@ -91,12 +91,16 @@
  1. Пользователи
  получение списка всех пользователей
  
- `SELECT *
- FROM film`
+ ```sql
+ SELECT *
+ FROM film
+ ```
  
 
  2. Фильмы
  получение списка всех фильмов
- `SELECT *
- FROM film`
+ 
+ ```SELECT *
+ FROM film
+ ```
 
