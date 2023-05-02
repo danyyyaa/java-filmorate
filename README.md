@@ -95,12 +95,29 @@
  SELECT *
  FROM film
  ```
+ получение информации о пользователе по его id
+ ```sql
+ SELECT *
+ FROM user
+ WHERE id = ?
+ ```
  
 
  2. Фильмы
  получение списка всех фильмов
  
- ```SELECT *
+ ```sql
+ SELECT *
  FROM film
  ```
+ 
+ получение информации о фильме по его id
+ 
+ ```sql
+ SELECT *
+ FROM film
+ WHERE id = ?
+ ```
+ 
+ 
 
