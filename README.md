@@ -106,7 +106,7 @@
  
  возвращает список пользователей, являющихся его друзьями
  ```sql
- SELECT
+ SELECT f.*
  FROM friendship AS f
  INNER JOIN user AS u ON u.user_id = f.friend_id
  WHERE f.user_id = ?
