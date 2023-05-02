@@ -75,6 +75,7 @@
 + user - данные о пользователях (primary key - user_id, foreign keys - friend_id, like_id)
 + friendship - содержит информации о статусе «дружбы» между двумя пользователями (primary key - friendship_id, foreign keys - user_id, friend_id)
 
+
    °  status = true — в таблице две записи о дружбе двух пользователей (id1 = id2; id2 = id1)
    °  status = false — в таблице одна запись о дружбе двух пользователей(id1 = id2).
 
