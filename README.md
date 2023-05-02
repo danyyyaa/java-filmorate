@@ -133,12 +133,15 @@
  
  возвращает список из первых count фильмов по количеству лайков
  ```sql
-SELECT f.*, mp.name, COUNT(fl.user_id) AS rate
+SELECT f.*,
+       mp.name,
+       COUNT(fl.user_id) AS rate
 FROM film AS f
 LEFT JOIN mpa_rating AS mp ON f.mpa_rating_id = mp.id
 LEFT JOIN film_like AS fl ON f.id = fl.film_id
 GROUP BY f.id
-ORDER BY rate DESC, f.id
+ORDER BY rate DESC,
+         f.id
 LIMIT ?
  ```
  
