@@ -164,21 +164,61 @@
 
  2. Фильмы
 
+ создание фильма
+ 
+ ```sql
+ INSERT INTO film (name, description, release_date, duration, mpa_rating_id)
+ VALUES (?, ?, ?, ?, ?)
+ ```
+ 
+ редактирование фильма
+ 
+ ```sql
+ UPDATE film
+ SET name = ?,
+ description = ?,
+ release_date = ?,
+ duration = ?,
+ mpa_rating_id = ?
+ WHERE id = ?
+ ```
 
  получение списка всех фильмов
  
  ```sql
- SELECT *
- FROM film
+ SELECT f.*, mp.name, COUNT(fl.user_id) AS rate
+ FROM film AS f
+ LEFT JOIN mpa_rating AS mp ON f.mpa_rating_id = mp.id
+ LEFT JOIN film_like AS fl ON f.id = fl.film_id
+ GROUP BY f.id
+ ORDER BY f.id
  ```
  
  получение информации о фильме по его id
  
  ```sql
- SELECT *
- FROM film
- WHERE id = ?
+ SELECT f.*, mp.name, COUNT(fl.user_id) AS rate
+ FROM film AS f
+ LEFT JOIN mpa_rating AS mpt ON f.mpa_rating_id = mp.id
+ LEFT JOIN film_like AS fl ON f.id = fl.film_id
+ WHERE f.id = 2
+ GROUP BY f.id
  ```
+ 
+ пользователь ставит лайк фильму
+ 
+  ```sql
+  INSERT INTO film_like (film_id, user_id)
+  VALUES (?, ?)
+  ```
+  
+  пользователь удаляет лайк
+  
+  ```sql
+ DELETE
+ FROM film_like
+ WHERE film_id = ? AND user_id = ?
+  ```
  
  возвращает список из первых count фильмов по количеству лайков
  ```sql
