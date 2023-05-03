@@ -91,17 +91,51 @@
  1. Пользователи
  
  
+ создание пользователя
+ 
+ ```sql
+ INSERT INTO user (name, email, login, birthday)
+ VALUES ( ?, ?, ?, ? );
+ ```
+ 
+ редактирование пользователя
+ 
+ ```sql
+ UPDATE user
+ SET email = ?,
+ login = ?,
+ name = ?,
+ birthday = ?
+ WHERE id = ?
+ ```
+ 
  получение списка всех пользователей
  
  ```sql
  SELECT *
- FROM film
+ FROM user
  ```
  получение информации о пользователе по его id
+ 
  ```sql
  SELECT *
  FROM user
  WHERE id = ?
+ ```
+ 
+ добавление в друзья
+ 
+ ```sql
+ INSERT INTO friendship (user_id, friend_id, status)
+ VALUES (?, ?, ?)
+ ```
+ 
+ удаление из друзей
+ 
+ ```sql
+ DELETE
+ FROM friendship
+ WHERE user_id = ? AND friend_id = ?
  ```
  
  возвращает список пользователей, являющихся его друзьями
@@ -112,6 +146,21 @@
  WHERE f.user_id = ?
  ```
  
+ список друзей, общих с другим пользователем
+ 
+ ```sql
+ SELECT u.*
+ FROM user AS u
+ INNER JOIN friendship AS fs ON u.id = fs.friend_id
+ WHERE ut.id = ?
+
+ INTERSECT
+
+ SELECT u.*
+ FROM user as u
+ INNER JOIN friendship as fs ON u.id = fs.friend_id
+ WHERE fs.user_id = ?
+ ```
 
  2. Фильмы
 
