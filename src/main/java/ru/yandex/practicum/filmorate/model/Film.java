@@ -26,6 +26,7 @@ public class Film {
     @DurationMin(nanos = 1)
     private Duration duration;
     private Set<Long> likes = new HashSet<>();
+    private Set<Long> genres = new HashSet<>();
 
     public Film(long id, String name, String description, LocalDate releaseDate, Duration duration) {
         this.id = id;

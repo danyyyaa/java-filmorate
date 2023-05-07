@@ -6,8 +6,8 @@ import ru.yandex.practicum.filmorate.controller.FilmController;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmServiceImpl;
-import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
-import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.impl.inmemory.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.impl.inmemory.InMemoryUserStorage;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
