@@ -16,6 +16,5 @@ public class Friendship {
     @PositiveOrZero
     private long friendId;
 
-    @PositiveOrZero
-    private boolean status;
+    private Boolean status;
 }

@@ -1,39 +1,59 @@
 package ru.yandex.practicum.filmorate.dao.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dao.UserDao;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
 public class UserDaoImpl implements UserDao {
     private final JdbcTemplate jdbcTemplate;
+
     @Override
-    public User saveUser(User user) {
+    public User createUser(User user) {
+        jdbcTemplate.update("INSERT INTO user_t VALUES(?, ?, ?, ?, ?)",
+                user.getId(),
+                user.getEmail(),
+                user.getLogin(),
+                user.getName(),
+                user.getBirthday());
         return user;
     }
 
     @Override
     public User updateUser(User user) {
-        return null;
+        jdbcTemplate.update("UPDATE user_t SET id = ?, email = ?, login = ?, name = ?, birthday = ?",
+                user.getId(),
+                user.getEmail(),
+                user.getLogin(),
+                user.getName(),
+                user.getBirthday());
+        return user;
     }
 
     @Override
-    public Optional<User> getUserById(long id) {
-        return Optional.empty();
+    public Optional<User> getUserById(long userId) {
+        return jdbcTemplate.query("SELECT * FROM user_t WHERE id = ?",
+                        new Object[]{userId},
+                        new BeanPropertyRowMapper<>(User.class))
+                .stream()
+                .findAny();
     }
 
     @Override
-    public Collection<User> getAllUsers() {
-        String sql = "select * from user_t";
+    public Collection<User> getUsers() {
+        return jdbcTemplate.query("SELECT * FROM user_t", new BeanPropertyRowMapper<>(User.class));
+    }
 
-        return null;
+    @Override
+    public Collection<User> getUsersByIds(Set<Long> ids) {
+        return jdbcTemplate.query("SELECT * FROM user_t WHERE id = ?",
+                new Object[]{ids},
+                new BeanPropertyRowMapper<>(User.class));
     }
 }

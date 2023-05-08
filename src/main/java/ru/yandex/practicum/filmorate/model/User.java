@@ -11,16 +11,22 @@ import java.util.Set;
 @Setter
 @ToString
 public class User {
+
     @PositiveOrZero
-    private Long id;
+    private long id;
+
     @Email
     @NotBlank
     private String email;
+
     @NotBlank
     private String login;
+
     private String name;
+
     @PastOrPresent
     private LocalDate birthday;
+
     private Set<Long> friendsId = new HashSet<>();
 
     public User(long id, String email, String login, String name, LocalDate birthday) {

@@ -6,11 +6,11 @@ import java.util.Collection;
 import java.util.Optional;
 
 public interface FilmDao {
-    Film saveFilm(Film film);
+    Film createFilm(Film film);
 
     Film updateFilm(Film film);
 
-    Optional<Film> findFilmById(long filmId);
+    Optional<Film> getFilmById(long filmId);
 
-    Collection<Film> findAllFilms();
+    Collection<Film> getFilms();
 }
