@@ -15,7 +15,7 @@ import java.util.Optional;
 public class FilmDaoImpl implements FilmDao {
     private final JdbcTemplate jdbcTemplate;
 
-    @Override
+    /*@Override
     public Film createFilm(Film film) {
         jdbcTemplate.update("INSERT INTO film_t VALUES(?, ?, ?, ?, ?)",
                 film.getId(),
@@ -24,11 +24,24 @@ public class FilmDaoImpl implements FilmDao {
                 film.getReleaseDate(),
                 film.getDuration());
         return film;
+    }*/
+
+    @Override
+    public Film createFilm(Film film) {
+        jdbcTemplate.update("INSERT INTO film_t VALUES(?, ?, ?, ?, ?, ?, ?)",
+                film.getId(),
+                film.getName(),
+                film.getDescription(),
+                film.getReleaseDate(),
+                film.getDuration(),
+                film.getLikes(),
+                film.getGenres());
+        return film;
     }
 
     @Override
     public Film updateFilm(Film film) {
-        jdbcTemplate.update("UPDATE film_t SET id = ?, name = ?, description = ?, releaseDate = ?, duration = ?",
+        jdbcTemplate.update("UPDATE film_t SET id = ?, name = ?, description = ?, release_date = ?, duration = ?",
                 film.getId(),
                 film.getName(),
                 film.getDescription(),

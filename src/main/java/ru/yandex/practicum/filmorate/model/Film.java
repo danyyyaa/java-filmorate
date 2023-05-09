@@ -11,9 +11,10 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-@Getter
+/*@Getter
 @Setter
-@ToString
+@ToString*/
+@Data
 public class Film {
 
     @PositiveOrZero
@@ -35,11 +36,19 @@ public class Film {
 
     private Set<Long> genres = new HashSet<>();
 
-    public Film(long id, String name, String description, LocalDate releaseDate, Duration duration) {
+    /*public Film(long id, String name, String description, LocalDate releaseDate, Duration duration) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
     }
+
+    public Film(long id, String name, String description, LocalDate releaseDate, long duration) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = Duration.ofMinutes(duration);
+    }*/
 }
