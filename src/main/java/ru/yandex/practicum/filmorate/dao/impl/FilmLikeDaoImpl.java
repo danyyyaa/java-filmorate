@@ -24,7 +24,7 @@ public class FilmLikeDaoImpl implements FilmLikeDao {
     }
 
     @Override
-    public Collection<FilmLike> getLikes(long filmId) {
+    public Collection<FilmLike> getFilmLikes(long filmId) {
         return jdbcTemplate.query("SELECT * FROM film_like_t", new BeanPropertyRowMapper<>(FilmLike.class));
     }
 

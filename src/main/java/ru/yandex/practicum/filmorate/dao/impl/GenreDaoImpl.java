@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.dao.GenreDao;
 import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -20,7 +21,7 @@ public class GenreDaoImpl implements GenreDao {
     }
 
     @Override
-    public Collection<Genre> getGenres(long id) {
+    public Collection<Genre> getGenres() {
         return jdbcTemplate.query("SELECT * FROM genre_t", new BeanPropertyRowMapper<>(Genre.class));
     }
 
@@ -29,5 +30,14 @@ public class GenreDaoImpl implements GenreDao {
         return jdbcTemplate.query("SELECT * FROM genre_t WHERE id = ?",
                 new Object[]{id},
                 new BeanPropertyRowMapper<>(Genre.class));
+    }
+
+    @Override
+    public Optional<Genre> getGenreById(long id) {
+        return jdbcTemplate.query("SELECT * FROM genre_t WHERE id = ?",
+                new Object[]{id},
+                new BeanPropertyRowMapper<>(Genre.class))
+                .stream()
+                .findAny();
     }
 }

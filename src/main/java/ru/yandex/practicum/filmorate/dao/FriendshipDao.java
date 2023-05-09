@@ -15,4 +15,6 @@ public interface FriendshipDao {
 
     Friendship createFriendship(Friendship friendship);
 
+    Collection<Long> getFriendIdsByUserId(long userId);
+
 }

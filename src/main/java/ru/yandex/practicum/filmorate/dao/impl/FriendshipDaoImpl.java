@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.model.Friendship;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ public class FriendshipDaoImpl implements FriendshipDao {
 
     @Override
     public void deleteFriendshipByUserId(long id) {
-        jdbcTemplate.update("DELETE FROM film_t WHERE id = ?", id);
+        jdbcTemplate.update("DELETE FROM friendship_t WHERE id = ?", id);
     }
 
     @Override
@@ -42,5 +43,14 @@ public class FriendshipDaoImpl implements FriendshipDao {
                 friendship.getFriendId(),
                 friendship.getStatus());
         return friendship;
+    }
+
+    @Override
+    public Collection<Long> getFriendIdsByUserId(long userId) {
+        return jdbcTemplate.query("SELECT user_id FROM friendship_t WHERE id = ?",
+                        new Object[]{userId}, new BeanPropertyRowMapper<>(Friendship.class))
+                .stream()
+                .map(Friendship::getFriendId)
+                .collect(Collectors.toSet());
     }
 }

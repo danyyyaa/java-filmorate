@@ -14,10 +14,20 @@ import java.util.*;
 public class UserDaoImpl implements UserDao {
     private final JdbcTemplate jdbcTemplate;
 
-    @Override
+    /*@Override
     public User createUser(User user) {
         jdbcTemplate.update("INSERT INTO user_t VALUES(?, ?, ?, ?, ?)",
                 user.getId(),
+                user.getEmail(),
+                user.getLogin(),
+                user.getName(),
+                user.getBirthday());
+        return user;
+    }*/
+
+    @Override
+    public User createUser(User user) {
+        jdbcTemplate.update("INSERT INTO user_t VALUES(email, login, name, birthday)",
                 user.getEmail(),
                 user.getLogin(),
                 user.getName(),
