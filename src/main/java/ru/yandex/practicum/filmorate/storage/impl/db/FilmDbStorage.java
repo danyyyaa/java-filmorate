@@ -3,39 +3,86 @@ package ru.yandex.practicum.filmorate.storage.impl.db;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
-import ru.yandex.practicum.filmorate.dao.FilmDao;
-import ru.yandex.practicum.filmorate.dao.FilmLikeDao;
-import ru.yandex.practicum.filmorate.dao.GenreDao;
-import ru.yandex.practicum.filmorate.dao.MpaRatingDao;
+import org.springframework.util.CollectionUtils;
+import ru.yandex.practicum.filmorate.dao.*;
+import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.GenreStorage;
+import ru.yandex.practicum.filmorate.storage.MpaRatingStorage;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
+import java.util.Set;
 
 
 @Repository
 @Primary
 @RequiredArgsConstructor
 public class FilmDbStorage implements FilmStorage {
+
     private final FilmDao filmDao;
+    private final MpaRatingStorage mpaRatingStorage;
+    private final GenreStorage genreStorage;
+    private final FilmGenreDao filmGenreDao;
 
     @Override
     public Collection<Film> getFilms() {
-        return filmDao.getFilms();
+        var films = filmDao.getFilms();
+        if (CollectionUtils.isEmpty(films)) {
+            return films;
+        }
+        films.stream()
+                .forEach(film -> {
+                    film.setGenres((Set<Genre>) genreStorage.getGenresByFilmId(film.getId()));
+                    if (film.getMpaRating() != null & film.getMpaRating().getId() != null) {
+                        film.setMpaRating(mpaRatingStorage.getMpaRatingById(film.getMpaRating().getId()));
+                    }
+                });
+        return new ArrayList<>(films);
     }
 
     @Override
     public Film updateFilm(Film film) {
-        return filmDao.updateFilm(film);
+        getFilmById(film.getId());
+        filmGenreDao.deleteFilmGenres(film.getId());
+        film = filmDao.updateFilm(film);
+        if (!CollectionUtils.isEmpty(film.getGenres())) {
+            for (Genre genre : film.getGenres()) {
+                filmGenreDao.linkGenreToFilm(film.getId(), genre.getId());
+            }
+        }
+
+        film.setGenres((Set<Genre>) genreStorage.getGenresByFilmId(film.getId()));
+        return film;
     }
 
     @Override
     public Film createFilm(Film film) {
-        return filmDao.createFilm(film);
+        filmDao.createFilm(film);
+        if (!CollectionUtils.isEmpty(film.getGenres())) {
+            for (Genre genre : film.getGenres()) {
+                filmGenreDao.linkGenreToFilm(film.getId(), genre.getId());
+            }
+        }
+
+        return film;
     }
 
     @Override
     public Film getFilmById(long id) {
-        return filmDao.getFilmById(id).get();
+        Optional<Film> filmOpt = filmDao.getFilmById(id);
+        if (filmOpt.isPresent()) {
+            var film = filmOpt.get();
+            if (film.getMpaRating() != null & film.getMpaRating().getId() != null) {
+                film.setMpaRating(mpaRatingStorage.getMpaRatingById(film.getMpaRating().getId()));
+            }
+            film.setGenres((Set<Genre>) genreStorage.getGenresByFilmId(id));
+            return film;
+        }
+
+        throw new FilmNotFoundException();
     }
 }

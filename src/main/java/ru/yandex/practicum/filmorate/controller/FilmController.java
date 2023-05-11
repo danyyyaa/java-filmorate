@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmLikeService;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
@@ -15,6 +16,7 @@ import java.util.*;
 @RequestMapping("/films")
 public class FilmController {
     private final FilmService filmService;
+    private final FilmLikeService filmLikeService;
 
     @GetMapping()
     public Collection<Film> getFilms() {
@@ -38,19 +40,19 @@ public class FilmController {
 
     @PutMapping("/{filmId}/like/{userId}")
     public void addLike(@PathVariable long filmId, @PathVariable long userId) {
-        filmService.addLike(filmId, userId);
+        filmLikeService.createLike(filmId, userId);
     }
 
-    @DeleteMapping("/{id}/like/{userId}")
-    public void unlike(@PathVariable long id, @PathVariable long userId) {
-        filmService.unlike(id, userId);
+    @DeleteMapping("/{filmId}/like/{userId}")
+    public void unlike(@PathVariable long filmId, @PathVariable long userId) {
+        filmLikeService.deleteLike(filmId, userId);
     }
 
     @GetMapping("/popular")
     public Collection<Film> getMostPopularFilms(@RequestParam(required = false) Optional<Integer> count) {
         if (count.isPresent()) {
-            return filmService.getMostPopularFilms(count.get());
+            return filmLikeService.getMostPopular(count.get());
         }
-        return filmService.getMostPopularFilms(10);
+        return filmLikeService.getMostPopular(10);
     }
 }

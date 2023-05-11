@@ -4,17 +4,16 @@ import ru.yandex.practicum.filmorate.model.Friendship;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 
 public interface FriendshipDao {
 
-    Optional<Friendship> getFriendshipById(long id);
-
-    void deleteFriendshipByUserId(long id);
-
-    Collection<Friendship> getFriendships();
-
     Friendship createFriendship(Friendship friendship);
 
+    void deleteFriendship(Friendship friendship);
+
     Collection<Long> getFriendIdsByUserId(long userId);
+
+    Optional<Friendship> getFriendship(Friendship friendship);
 
 }

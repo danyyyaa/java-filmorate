@@ -1,20 +1,24 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.validation.constraints.PositiveOrZero;
 
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Friendship {
     @PositiveOrZero
-    private long id;
+    private Long id;
 
     @PositiveOrZero
-    private long userId;
+    private Long userId;
 
     @PositiveOrZero
-    private long friendId;
+    private Long friendId;
 
     private Boolean status;
+
 }

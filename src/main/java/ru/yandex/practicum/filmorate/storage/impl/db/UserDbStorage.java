@@ -33,7 +33,8 @@ public class UserDbStorage implements UserStorage {
         if (!isExist(user.getId())) {
             throw new UserNotFoundException();
         }
-        return userDao.updateUser(user);
+        userDao.updateUser(user);
+        return user;
     }
 
     @Override

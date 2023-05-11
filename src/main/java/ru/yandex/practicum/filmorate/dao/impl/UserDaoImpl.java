@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.dao.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
@@ -15,25 +14,27 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Slf4j
+import static ru.yandex.practicum.filmorate.constant.UserConstant.*;
+
 @Component
 @RequiredArgsConstructor
 public class UserDaoImpl implements UserDao {
+
     private final JdbcTemplate jdbcTemplate;
 
     @Override
     public User createUser(User user) {
         Map<String, Object> keys = new SimpleJdbcInsert(this.jdbcTemplate)
-                .withTableName("user_t")
-                .usingColumns("name", "email", "login", "birthday")
+                .withTableName(USER_TABLE)
+                .usingColumns(NAME, EMAIL, LOGIN, BIRTHDAY)
                 .usingGeneratedKeyColumns("id")
                 .executeAndReturnKeyHolder(Map.of("login", user.getLogin(),
-                        "email", user.getEmail(),
-                        "name", user.getName(),
-                        "birthday", java.sql.Date.valueOf(user.getBirthday())))
+                        EMAIL, user.getEmail(),
+                        NAME, user.getName(),
+                        BIRTHDAY, java.sql.Date.valueOf(user.getBirthday())))
                 .getKeys();
         assert keys != null;
-        user.setId((Long) keys.get("id"));
+        user.setId((Long) keys.get(ID));
 
         return user;
     }
@@ -60,21 +61,21 @@ public class UserDaoImpl implements UserDao {
     }
 
     private User mapToUser(ResultSet userRows) throws SQLException {
-        long userId = userRows.getLong("id");
+        long userId = userRows.getLong(ID);
         if (userId <= 0) {
             return null;
         }
-        LocalDate birthday = userRows.getDate("birthday").toLocalDate();
+        LocalDate birthday = userRows.getDate(BIRTHDAY).toLocalDate();
         return new User(
-                userRows.getLong("id"),
-                userRows.getString("email"),
-                userRows.getString("login"),
-                userRows.getString("name"),
+                userRows.getLong(ID),
+                userRows.getString(EMAIL),
+                userRows.getString(LOGIN),
+                userRows.getString(NAME),
                 birthday);
     }
 
     @Override
-    public List<User> getUsers() {
+    public Collection<User> getUsers() {
         String sqlToUserTable = "select * from user_t";
         return jdbcTemplate.query(sqlToUserTable, (rs, rowNum) -> mapToUser(rs))
                 .stream()

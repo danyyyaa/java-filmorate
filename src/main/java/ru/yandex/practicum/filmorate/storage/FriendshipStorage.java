@@ -8,7 +8,7 @@ public interface FriendshipStorage {
 
     Friendship createFriendship(Friendship friendship);
 
-    void deleteFriendshipById(long userId);
+    void deleteFriendship(Friendship friendship);
 
     Collection<Long> getFriendIdsByUserId(long userId);
 }

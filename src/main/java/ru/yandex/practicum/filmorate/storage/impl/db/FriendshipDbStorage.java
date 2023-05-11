@@ -21,8 +21,8 @@ public class FriendshipDbStorage implements FriendshipStorage {
     }
 
     @Override
-    public void deleteFriendshipById(long userId) {
-        friendshipDao.deleteFriendshipByUserId(userId);
+    public void deleteFriendship(Friendship friendship) {
+        friendshipDao.deleteFriendship(friendship);
     }
 
     @Override

@@ -14,15 +14,15 @@ import java.util.Collection;
 @RequiredArgsConstructor
 @RequestMapping("/mpa")
 public class MpaRatingController {
-    //private final MpaRatingService mpaRatingService;
+    private final MpaRatingService mpaRatingService;
 
     @GetMapping
     public Collection<MpaRating> getMpaRatings() {
-        return null;
+        return mpaRatingService.GetMpaRatings();
     }
 
     @GetMapping("/{mpaRatingId}")
     public MpaRating getMpaRatingById(@PathVariable long mpaRatingId) {
-        return null;
+        return mpaRatingService.getMpaRatingById(mpaRatingId);
     }
 }

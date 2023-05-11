@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.dao.FilmLikeDao;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.FilmLike;
 import ru.yandex.practicum.filmorate.storage.FilmLikeStorage;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
@@ -16,6 +15,7 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class FilmLikeDbStorage implements FilmLikeStorage {
     private final FilmLikeDao filmLikeDao;
+    private final FilmStorage filmStorage;
 
     @Override
     public FilmLike createLike(FilmLike filmLike) {
@@ -28,7 +28,8 @@ public class FilmLikeDbStorage implements FilmLikeStorage {
     }
 
     @Override
-    public void deleteFilmLikeById(long filmLikeId) {
-        filmLikeDao.deleteLike(filmLikeId);
+    public void deleteLike(FilmLike filmLike) {
+        filmStorage.getFilmById(filmLike.getId());
+        filmLikeDao.deleteLike(filmLike);
     }
 }

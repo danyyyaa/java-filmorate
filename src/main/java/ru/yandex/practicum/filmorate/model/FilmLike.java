@@ -1,18 +1,19 @@
 package ru.yandex.practicum.filmorate.model;
 
+import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 
 import javax.validation.constraints.PositiveOrZero;
 
 @Data
+@Builder
 public class FilmLike {
     @PositiveOrZero
-    private long id;
+    private Long id;
 
     @PositiveOrZero
-    private long UserId;
+    private Long userId;
 
     @PositiveOrZero
-    private long filmId;
+    private Long filmId;
 }

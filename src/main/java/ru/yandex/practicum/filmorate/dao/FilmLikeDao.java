@@ -10,5 +10,5 @@ public interface FilmLikeDao {
 
     Collection<FilmLike> getFilmLikes(long filmId);
 
-    void deleteLike(long filmId);
+    void deleteLike(FilmLike filmLike);
 }

@@ -7,8 +7,6 @@ import java.util.Optional;
 
 public interface GenreDao {
 
-    void deleteGenreById(long id);
-
     Collection<Genre> getGenres();
 
     Collection<Genre> getGenresByFilmId(long id);
