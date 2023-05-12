@@ -29,7 +29,7 @@ public class FilmLikeDbStorage implements FilmLikeStorage {
 
     @Override
     public void deleteLike(FilmLike filmLike) {
-        filmStorage.getFilmById(filmLike.getId());
+        filmStorage.getFilmById(filmLike.getFilmId());
         filmLikeDao.deleteLike(filmLike);
     }
 }

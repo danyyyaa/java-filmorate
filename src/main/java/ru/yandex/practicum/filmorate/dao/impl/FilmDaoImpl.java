@@ -33,7 +33,7 @@ public class FilmDaoImpl implements FilmDao {
                         DESCRIPTION, film.getDescription(),
                         RELEASE_DATE, java.sql.Date.valueOf(film.getReleaseDate()),
                         DURATION, film.getDuration(),
-                        MPA_RATING_ID, film.getMpaRating().getId()))
+                        MPA_RATING_ID, film.getMpa().getId()))
                 .getKeys();
         film.setId((Long) keys.get(ID));
         return film;
@@ -50,14 +50,13 @@ public class FilmDaoImpl implements FilmDao {
                 film.getDescription(),
                 film.getReleaseDate(),
                 film.getDuration(),
-                film.getMpaRating().getId(),
+                film.getMpa().getId(),
                 film.getId());
         return film;
     }
 
     @Override
     public Optional<Film> getFilmById(long id) {
-
         String sqlToFilmTable = "select * from film_t where id = ? ";
         return jdbcTemplate.query(sqlToFilmTable, (rs, rowNum) -> mapToFilm(rs), id)
                 .stream()

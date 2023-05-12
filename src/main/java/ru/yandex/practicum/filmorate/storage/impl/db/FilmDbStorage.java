@@ -12,10 +12,7 @@ import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.GenreStorage;
 import ru.yandex.practicum.filmorate.storage.MpaRatingStorage;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 
 @Repository
@@ -36,9 +33,9 @@ public class FilmDbStorage implements FilmStorage {
         }
         films.stream()
                 .forEach(film -> {
-                    film.setGenres((Set<Genre>) genreStorage.getGenresByFilmId(film.getId()));
-                    if (film.getMpaRating() != null & film.getMpaRating().getId() != null) {
-                        film.setMpaRating(mpaRatingStorage.getMpaRatingById(film.getMpaRating().getId()));
+                    film.setGenres((List<Genre>) genreStorage.getGenresByFilmId(film.getId()));
+                    if (film.getMpa() != null & film.getMpa().getId() != null) {
+                        film.setMpa(mpaRatingStorage.getMpaRatingById(film.getMpa().getId()));
                     }
                 });
         return new ArrayList<>(films);
@@ -55,7 +52,7 @@ public class FilmDbStorage implements FilmStorage {
             }
         }
 
-        film.setGenres((Set<Genre>) genreStorage.getGenresByFilmId(film.getId()));
+        film.setGenres((List<Genre>) genreStorage.getGenresByFilmId(film.getId()));
         return film;
     }
 
@@ -75,11 +72,11 @@ public class FilmDbStorage implements FilmStorage {
     public Film getFilmById(long id) {
         Optional<Film> filmOpt = filmDao.getFilmById(id);
         if (filmOpt.isPresent()) {
-            var film = filmOpt.get();
-            if (film.getMpaRating() != null & film.getMpaRating().getId() != null) {
-                film.setMpaRating(mpaRatingStorage.getMpaRatingById(film.getMpaRating().getId()));
+            Film film = filmOpt.get();
+            if (film.getMpa() != null & film.getMpa().getId() != null) {
+                film.setMpa(mpaRatingStorage.getMpaRatingById(film.getMpa().getId()));
             }
-            film.setGenres((Set<Genre>) genreStorage.getGenresByFilmId(id));
+            film.setGenres((List<Genre>) genreStorage.getGenresByFilmId(id));
             return film;
         }
 

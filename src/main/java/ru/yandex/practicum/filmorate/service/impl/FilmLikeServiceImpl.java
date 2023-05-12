@@ -50,7 +50,7 @@ public class FilmLikeServiceImpl implements FilmLikeService {
                     if (!CollectionUtils.isEmpty(likes)) {
                         el.setLikes(likes.stream()
                                 .map(FilmLike::getFilmId)
-                                .collect(Collectors.toSet()));
+                                .collect(Collectors.toList()));
                     }
                 })
                 .sorted(comparator.reversed())

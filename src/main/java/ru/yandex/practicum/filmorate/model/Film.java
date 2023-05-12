@@ -6,7 +6,9 @@ import ru.yandex.practicum.filmorate.validation.After;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /*@Getter
@@ -29,23 +31,24 @@ public class Film {
     @After("1895-12-28")
     private LocalDate releaseDate;
 
+    @Positive
     private Integer duration;
 
-    private MpaRating mpaRating;
+    private MpaRating mpa;
 
-    private Set<Long> likes = new HashSet<>();
+    private List<Long> likes = new ArrayList<>();
 
-    private Set<Genre> genres;
+    private List<Genre> genres;
 
 
 
     public Film(long id, String name, String description, LocalDate releaseDate,
-                Integer duration, MpaRating mpaRating) {
+                Integer duration, MpaRating mpa) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
-        this.mpaRating = mpaRating;
+        this.mpa = mpa;
     }
 }
