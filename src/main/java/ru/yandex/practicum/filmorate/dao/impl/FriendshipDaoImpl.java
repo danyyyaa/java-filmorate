@@ -19,6 +19,7 @@ import static ru.yandex.practicum.filmorate.constant.FriendshipConstant.*;
 @Component
 @RequiredArgsConstructor
 public class FriendshipDaoImpl implements FriendshipDao {
+
     private final JdbcTemplate jdbcTemplate;
 
     @Override

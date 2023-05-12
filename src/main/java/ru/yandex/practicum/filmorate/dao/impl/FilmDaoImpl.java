@@ -35,6 +35,7 @@ public class FilmDaoImpl implements FilmDao {
                         DURATION, film.getDuration(),
                         MPA_RATING_ID, film.getMpa().getId()))
                 .getKeys();
+        assert keys != null;
         film.setId((Long) keys.get(ID));
         return film;
     }

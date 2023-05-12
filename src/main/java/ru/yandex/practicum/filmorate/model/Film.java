@@ -11,9 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/*@Getter
-@Setter
-@ToString*/
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,7 +30,7 @@ public class Film {
     private LocalDate releaseDate;
 
     @Positive
-    private Integer duration;
+    private int duration;
 
     private MpaRating mpa;
 
@@ -40,10 +38,8 @@ public class Film {
 
     private List<Genre> genres;
 
-
-
     public Film(long id, String name, String description, LocalDate releaseDate,
-                Integer duration, MpaRating mpa) {
+                int duration, MpaRating mpa) {
         this.id = id;
         this.name = name;
         this.description = description;

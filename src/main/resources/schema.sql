@@ -1,53 +1,60 @@
-CREATE TABLE IF NOT EXISTS MPA_RATING_T(
-                                           ID BIGINT NOT NULL AUTO_INCREMENT,
-                                           NAME VARCHAR NOT NULL,
-                                           CONSTRAINT MPA_RATING_PK PRIMARY KEY (ID)
-    );
-CREATE TABLE IF NOT EXISTS FILM_T(
-                                     ID BIGINT NOT NULL AUTO_INCREMENT,
-                                     NAME VARCHAR NOT NULL,
-                                     DESCRIPTION VARCHAR(200),
-    RELEASE_DATE DATE,
-    DURATION Integer,
-    MPA_RATING_ID BIGINT NOT NULL,
-    CONSTRAINT FILM_PK PRIMARY KEY (ID),
-    CONSTRAINT FILM_FK FOREIGN KEY (MPA_RATING_ID) REFERENCES MPA_RATING_T(ID) ON DELETE RESTRICT ON UPDATE CASCADE
-    );
-CREATE TABLE IF NOT EXISTS GENRE_T (
-                                       ID BIGINT NOT NULL AUTO_INCREMENT,
-                                       NAME VARCHAR NOT NULL,
-                                       CONSTRAINT GENRE_PK PRIMARY KEY (ID)
-    );
-CREATE TABLE IF NOT EXISTS USER_T (
-                                      ID BIGINT NOT NULL AUTO_INCREMENT,
-                                      NAME VARCHAR,
-                                      EMAIL VARCHAR NOT NULL,
-                                      LOGIN VARCHAR NOT NULL,
-                                      BIRTHDAY DATE,
-                                      CONSTRAINT USER_PK PRIMARY KEY (ID)
-    );
-CREATE TABLE IF NOT EXISTS FILM_GENRE_T (
-                                            ID BIGINT NOT NULL AUTO_INCREMENT,
-                                            FILM_ID BIGINT NOT NULL,
-                                            GENRE_ID BIGINT NOT NULL,
-                                            CONSTRAINT FILM_GENRE_PK PRIMARY KEY (ID),
-    CONSTRAINT FILM_GENRE_FK FOREIGN KEY (GENRE_ID) REFERENCES GENRE_T(ID) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT FILM_GENRE_FK_1 FOREIGN KEY (FILM_ID) REFERENCES FILM_T(ID) ON DELETE CASCADE ON UPDATE CASCADE
-    );
-CREATE TABLE IF NOT EXISTS FRIENDSHIP_T (
-                                            ID BIGINT NOT NULL AUTO_INCREMENT,
-                                            USER_ID BIGINT NOT NULL,
-                                            FRIEND_ID BIGINT NOT NULL,
-                                            STATUS BOOLEAN NOT NULL,
-                                            CONSTRAINT FRIENDSHIP_PK PRIMARY KEY (ID),
-    CONSTRAINT FRIENDSHIP_ID_FK FOREIGN KEY (FRIEND_ID) REFERENCES USER_T(ID) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT USER_ID_FK FOREIGN KEY (USER_ID) REFERENCES USER_T(ID) ON DELETE CASCADE ON UPDATE CASCADE
-    );
-CREATE TABLE IF NOT EXISTS FILM_LIKE_T (
-                                           ID BIGINT NOT NULL AUTO_INCREMENT,
-                                           FILM_ID BIGINT NOT NULL,
-                                           USER_ID BIGINT NOT NULL,
-                                           CONSTRAINT ID_PK PRIMARY KEY (ID),
-    CONSTRAINT FILM_ID_FK FOREIGN KEY (FILM_ID) REFERENCES FILM_T(ID) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT USER_ID_LKS_FK FOREIGN KEY (USER_ID) REFERENCES USER_T(ID) ON DELETE CASCADE ON UPDATE CASCADE
-    );
+CREATE TABLE IF NOT EXISTS mpa_rating_t
+(
+    id   BIGINT  NOT NULL AUTO_INCREMENT,
+    name VARCHAR NOT NULL,
+    CONSTRAINT mpa_rating_pk PRIMARY KEY (id)
+);
+CREATE TABLE IF NOT EXISTS film_t
+(
+    id            BIGINT  NOT NULL AUTO_INCREMENT,
+    name          VARCHAR NOT NULL,
+    DESCRIPTION   VARCHAR(200),
+    release_date  DATE,
+    duration      Integer,
+    mpa_rating_id BIGINT  NOT NULL,
+    CONSTRAINT film_pk PRIMARY KEY (id),
+    CONSTRAINT film_fk FOREIGN KEY (mpa_rating_id) REFERENCES mpa_rating_T (id) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+CREATE TABLE IF NOT EXISTS genre_t
+(
+    id   BIGINT  NOT NULL AUTO_INCREMENT,
+    name VARCHAR NOT NULL,
+    CONSTRAINT genre_pk PRIMARY KEY (id)
+);
+CREATE TABLE IF NOT EXISTS user_t
+(
+    id       BIGINT  NOT NULL AUTO_INCREMENT,
+    name     VARCHAR,
+    email    VARCHAR NOT NULL,
+    login    VARCHAR NOT NULL,
+    birthday DATE,
+    CONSTRAINT user_pk PRIMARY KEY (id)
+);
+CREATE TABLE IF NOT EXISTS film_genre_t
+(
+    id       BIGINT NOT NULL AUTO_INCREMENT,
+    film_id  BIGINT NOT NULL,
+    genre_id BIGINT NOT NULL,
+    CONSTRAINT film_genre_pk PRIMARY KEY (id),
+    CONSTRAINT film_genre_fk FOREIGN KEY (genre_id) REFERENCES genre_T (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT film_genre_fk_1 FOREIGN KEY (film_id) REFERENCES film_T (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE TABLE IF NOT EXISTS friendship_t
+(
+    id        BIGINT  NOT NULL AUTO_INCREMENT,
+    user_id   BIGINT  NOT NULL,
+    friend_id BIGINT  NOT NULL,
+    status    BOOLEAN NOT NULL,
+    CONSTRAINT friendship_pk PRIMARY KEY (id),
+    CONSTRAINT friendship_id_fk FOREIGN KEY (friend_id) REFERENCES user_T (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT user_id_fk FOREIGN KEY (user_id) REFERENCES user_T (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE TABLE IF NOT EXISTS film_like_t
+(
+    id      BIGINT NOT NULL AUTO_INCREMENT,
+    film_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
+    CONSTRAINT id_pk PRIMARY KEY (id),
+    CONSTRAINT film_id_fk FOREIGN KEY (film_id) REFERENCES film_T (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT user_id_LKS_fk FOREIGN KEY (user_id) REFERENCES user_T (id) ON DELETE CASCADE ON UPDATE CASCADE
+);

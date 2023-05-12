@@ -19,6 +19,7 @@ import static ru.yandex.practicum.filmorate.constant.MpaRatingConstant.ID;
 @Component
 @RequiredArgsConstructor
 public class MpaRatingDaoImpl implements MpaRatingDao {
+
     private final JdbcTemplate jdbcTemplate;
 
     @Override

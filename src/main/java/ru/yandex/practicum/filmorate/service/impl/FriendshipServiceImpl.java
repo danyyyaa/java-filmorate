@@ -39,13 +39,12 @@ public class FriendshipServiceImpl implements FriendshipService {
         return friendshipStorage.createFriendship(Friendship.builder()
                 .userId(userId)
                 .friendId(friendId)
-                //.status(false)
                 .build());
 
     }
 
     @Override
-    public void deleteFriend(long userId, long friendId) {
+    public void unfriend(long userId, long friendId) {
         friendshipStorage.deleteFriendship(Friendship.builder()
                 .userId(userId)
                 .friendId(friendId)

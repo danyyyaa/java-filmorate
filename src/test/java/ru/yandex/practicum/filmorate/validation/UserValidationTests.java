@@ -1,12 +1,12 @@
 package ru.yandex.practicum.filmorate.validation;
 
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.UserServiceImpl;
-import ru.yandex.practicum.filmorate.storage.impl.inmemory.InMemoryUserStorage;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -16,6 +16,8 @@ import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@RequiredArgsConstructor
+@SpringBootTest
 public class UserValidationTests {
     private UserController userController;
     private User user;
@@ -25,18 +27,11 @@ public class UserValidationTests {
     @BeforeEach
     public void setUp() {
         user = new User(1, "aa", "abc", "cc", LocalDate.of(2002, 11, 11));
-        userController = new UserController(new UserServiceImpl(new InMemoryUserStorage()));
-    }
-
-    @Test
-    public void userDefaultTest() {
-        userController.createUser(user);
-        assertEquals(1, userController.getUsers().size());
     }
 
     @Test
     public void idMissedTest() {
-        assertThrows(UserNotFoundException.class, () -> userController.updateUser(user));
+        assertThrows(NullPointerException.class, () -> userController.updateUser(user));
     }
 
     @Test

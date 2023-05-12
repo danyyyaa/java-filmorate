@@ -19,6 +19,7 @@ import static ru.yandex.practicum.filmorate.constant.GenreConstant.ID;
 @Component
 @RequiredArgsConstructor
 public class GenreDaoImpl implements GenreDao {
+
     private final JdbcTemplate jdbcTemplate;
 
     @Override

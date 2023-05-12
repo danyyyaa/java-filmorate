@@ -39,20 +39,20 @@ public class FilmController {
     }
 
     @PutMapping("/{filmId}/like/{userId}")
-    public void addLike(@PathVariable long filmId, @PathVariable long userId) {
+    public void createLike(@PathVariable long filmId, @PathVariable long userId) {
         filmLikeService.createLike(filmId, userId);
     }
 
     @DeleteMapping("/{filmId}/like/{userId}")
     public void unlike(@PathVariable long filmId, @PathVariable long userId) {
-        filmLikeService.deleteLike(filmId, userId);
+        filmLikeService.unlike(filmId, userId);
     }
 
     @GetMapping("/popular")
     public Collection<Film> getMostPopularFilms(@RequestParam(required = false) Optional<Integer> count) {
         if (count.isPresent()) {
-            return filmLikeService.getMostPopular(count.get());
+            return filmLikeService.getMostPopularFilms(count.get());
         }
-        return filmLikeService.getMostPopular(10);
+        return filmLikeService.getMostPopularFilms(10);
     }
 }

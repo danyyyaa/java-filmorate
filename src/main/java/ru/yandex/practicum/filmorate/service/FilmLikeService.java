@@ -8,7 +8,7 @@ public interface FilmLikeService {
 
     void createLike(long filmId, long userId);
 
-    void deleteLike(long filmId, long userId);
+    void unlike(long filmId, long userId);
 
-    Collection<Film> getMostPopular(long count);
+    Collection<Film> getMostPopularFilms(int count);
 }

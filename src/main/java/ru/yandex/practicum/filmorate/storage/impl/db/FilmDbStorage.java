@@ -31,13 +31,13 @@ public class FilmDbStorage implements FilmStorage {
         if (CollectionUtils.isEmpty(films)) {
             return films;
         }
-        films.stream()
-                .forEach(film -> {
-                    film.setGenres((List<Genre>) genreStorage.getGenresByFilmId(film.getId()));
-                    if (film.getMpa() != null & film.getMpa().getId() != null) {
-                        film.setMpa(mpaRatingStorage.getMpaRatingById(film.getMpa().getId()));
-                    }
-                });
+        films.forEach(film -> {
+            film.setGenres((List<Genre>) genreStorage.getGenresByFilmId(film.getId()));
+            assert film.getMpa() != null;
+            if (film.getMpa().getId() != null) {
+                film.setMpa(mpaRatingStorage.getMpaRatingById(film.getMpa().getId()));
+            }
+        });
         return new ArrayList<>(films);
     }
 
@@ -73,7 +73,8 @@ public class FilmDbStorage implements FilmStorage {
         Optional<Film> filmOpt = filmDao.getFilmById(id);
         if (filmOpt.isPresent()) {
             Film film = filmOpt.get();
-            if (film.getMpa() != null & film.getMpa().getId() != null) {
+            assert film.getMpa() != null;
+            if (film.getMpa().getId() != null) {
                 film.setMpa(mpaRatingStorage.getMpaRatingById(film.getMpa().getId()));
             }
             film.setGenres((List<Genre>) genreStorage.getGenresByFilmId(id));

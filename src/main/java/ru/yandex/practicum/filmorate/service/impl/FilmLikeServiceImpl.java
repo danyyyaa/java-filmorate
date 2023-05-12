@@ -32,16 +32,16 @@ public class FilmLikeServiceImpl implements FilmLikeService {
     }
 
     @Override
-    public void deleteLike(long filmId, long userId) {
+    public void unlike(long filmId, long userId) {
         userStorage.getUserById(userId);
-        filmLikeStorage.deleteLike(FilmLike.builder()
+        filmLikeStorage.unlike(FilmLike.builder()
                 .filmId(filmId)
                 .userId(userId)
                 .build());
     }
 
     @Override
-    public Collection<Film> getMostPopular(long count) {
+    public Collection<Film> getMostPopularFilms(int count) {
         Comparator<Film> comparator = Comparator.comparingInt((Film film) -> film.getLikes().size());
         return filmStorage.getFilms()
                 .stream()

@@ -20,6 +20,7 @@ import static ru.yandex.practicum.filmorate.constant.FilmLikeConstant.FILM_ID;
 @Component
 @RequiredArgsConstructor
 public class FilmLikeDaoImpl implements FilmLikeDao {
+
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -31,6 +32,7 @@ public class FilmLikeDaoImpl implements FilmLikeDao {
                 .executeAndReturnKeyHolder(Map.of(USER_ID, filmLike.getUserId(),
                         FILM_ID, filmLike.getFilmId()))
                 .getKeys();
+        assert keys != null;
         filmLike.setId((Long) keys.get(ID));
         return filmLike;
     }
@@ -45,7 +47,7 @@ public class FilmLikeDaoImpl implements FilmLikeDao {
     }
 
     @Override
-    public void deleteLike(FilmLike filmLike) {
+    public void unlike(FilmLike filmLike) {
         String sqlToFilmLikeTable = "delete from film_like_t where user_id = ? and film_id = ?";
         jdbcTemplate.update(sqlToFilmLikeTable, filmLike.getUserId(),
                 filmLike.getFilmId());
