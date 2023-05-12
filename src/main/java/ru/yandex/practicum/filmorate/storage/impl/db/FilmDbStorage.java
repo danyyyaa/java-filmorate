@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.storage.impl.db;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
@@ -18,6 +19,7 @@ import java.util.*;
 @Repository
 @Primary
 @RequiredArgsConstructor
+@Slf4j
 public class FilmDbStorage implements FilmStorage {
 
     private final FilmDao filmDao;
@@ -27,17 +29,16 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Collection<Film> getFilms() {
-        var films = filmDao.getFilms();
+        Collection<Film> films = filmDao.getFilms();
         if (CollectionUtils.isEmpty(films)) {
+            log.info("Получены фильмы: " + films);
             return films;
         }
         films.forEach(film -> {
             film.setGenres((List<Genre>) genreStorage.getGenresByFilmId(film.getId()));
-            assert film.getMpa() != null;
-            if (film.getMpa().getId() != null) {
-                film.setMpa(mpaRatingStorage.getMpaRatingById(film.getMpa().getId()));
-            }
+            film.setMpa(mpaRatingStorage.getMpaRatingById(film.getMpa().getId()));
         });
+        log.info("Получен пустой список фильмов");
         return new ArrayList<>(films);
     }
 
@@ -53,6 +54,7 @@ public class FilmDbStorage implements FilmStorage {
         }
 
         film.setGenres((List<Genre>) genreStorage.getGenresByFilmId(film.getId()));
+        log.info("Обновлен фильм: " + film);
         return film;
     }
 
@@ -65,6 +67,7 @@ public class FilmDbStorage implements FilmStorage {
             }
         }
 
+        log.info("Создан фильм: " + film);
         return film;
     }
 
@@ -73,14 +76,13 @@ public class FilmDbStorage implements FilmStorage {
         Optional<Film> filmOpt = filmDao.getFilmById(id);
         if (filmOpt.isPresent()) {
             Film film = filmOpt.get();
-            assert film.getMpa() != null;
-            if (film.getMpa().getId() != null) {
-                film.setMpa(mpaRatingStorage.getMpaRatingById(film.getMpa().getId()));
-            }
+            film.setMpa(mpaRatingStorage.getMpaRatingById(film.getMpa().getId()));
             film.setGenres((List<Genre>) genreStorage.getGenresByFilmId(id));
+            log.info("Получен фильм id = " + id);
             return film;
         }
 
+        log.error("Ошибка, фильм id = " + id + " не найден");
         throw new FilmNotFoundException();
     }
 }

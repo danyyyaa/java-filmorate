@@ -34,14 +34,12 @@ public class FilmGenreDaoImpl implements FilmGenreDao {
 
     @Override
     public void deleteFilmGenres(long filmId) {
-        String sqlToGenreTable = "delete from film_genre_t where film_id = ?";
+        String sqlToGenreTable = "DELETE FROM film_genre_t WHERE film_id = ?";
         jdbcTemplate.update(sqlToGenreTable, filmId);
     }
 
     public boolean linkAlreadyExist(long filmId, long genreId) {
-
-        String sqlToGenreTable = "select * from film_genre_t where film_id = ? and genre_id = ? ";
-
+        String sqlToGenreTable = "SELECT * FROM film_genre_t WHERE film_id = ? AND genre_id = ? ";
         SqlRowSet genreRows = jdbcTemplate.queryForRowSet(sqlToGenreTable, filmId, genreId);
         return genreRows.next();
     }

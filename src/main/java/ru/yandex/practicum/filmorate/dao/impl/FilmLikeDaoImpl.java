@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.dao.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import static ru.yandex.practicum.filmorate.constant.FilmLikeConstant.*;
 import static ru.yandex.practicum.filmorate.constant.FilmLikeConstant.FILM_ID;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class FilmLikeDaoImpl implements FilmLikeDao {
 
@@ -39,7 +41,7 @@ public class FilmLikeDaoImpl implements FilmLikeDao {
 
     @Override
     public List<FilmLike> getFilmLikes(long filmId) {
-        String sqlToFilmLikeTable = "select * from film_like_t where film_id = ? ";
+        String sqlToFilmLikeTable = "SELECT * FROM film_like_t WHERE film_id = ? ";
         return jdbcTemplate.query(sqlToFilmLikeTable, (rs, rowNum) -> mapToFilmLike(rs), filmId)
                 .stream()
                 .filter(Objects::nonNull)
@@ -48,17 +50,12 @@ public class FilmLikeDaoImpl implements FilmLikeDao {
 
     @Override
     public void unlike(FilmLike filmLike) {
-        String sqlToFilmLikeTable = "delete from film_like_t where user_id = ? and film_id = ?";
+        String sqlToFilmLikeTable = "DELETE FROM film_like_t WHERE user_id = ? AND film_id = ?";
         jdbcTemplate.update(sqlToFilmLikeTable, filmLike.getUserId(),
                 filmLike.getFilmId());
     }
 
     private FilmLike mapToFilmLike(ResultSet filmLikeRows) throws SQLException {
-        var userId = filmLikeRows.getLong(USER_ID);
-        var filmId = filmLikeRows.getLong(FILM_ID);
-        if (userId <= 0 || filmId <= 0) {
-            return null;
-        }
         return FilmLike.builder()
                 .id(filmLikeRows.getLong(ID))
                 .userId(filmLikeRows.getLong(USER_ID))

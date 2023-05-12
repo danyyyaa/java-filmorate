@@ -6,15 +6,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Positive;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class MpaRating {
-    @PositiveOrZero
-    private Long id;
+
+    @Positive
+    private long id;
 
     @NotBlank
     private String name;

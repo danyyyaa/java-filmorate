@@ -7,18 +7,17 @@ import ru.yandex.practicum.filmorate.validation.After;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Film {
 
-    @PositiveOrZero
-    private long id;
+    @Positive
+    private Long id;
 
     @NotBlank
     private String name;

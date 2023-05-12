@@ -10,7 +10,6 @@ import ru.yandex.practicum.filmorate.model.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -61,17 +60,20 @@ public class UserDaoImpl implements UserDao {
     }
 
     private User mapToUser(ResultSet userRows) throws SQLException {
-        long userId = userRows.getLong(ID);
-        if (userId <= 0) {
-            return null;
-        }
-        LocalDate birthday = userRows.getDate(BIRTHDAY).toLocalDate();
         return new User(
                 userRows.getLong(ID),
                 userRows.getString(EMAIL),
                 userRows.getString(LOGIN),
                 userRows.getString(NAME),
-                birthday);
+                userRows.getDate(BIRTHDAY).toLocalDate());
+
+        /*return User.builder()
+                .id(userRows.getLong(ID))
+                .email(userRows.getString(EMAIL))
+                .login(userRows.getString(LOGIN))
+                .name(userRows.getString(NAME))
+                .birthday(userRows.getDate(BIRTHDAY).toLocalDate())
+                .build();*/
     }
 
     @Override

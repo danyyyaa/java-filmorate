@@ -41,10 +41,6 @@ public class MpaRatingDaoImpl implements MpaRatingDao {
     }
 
     private MpaRating mapToMpaRating(ResultSet mpaRatingRows) throws SQLException {
-        var mpaRaringId = mpaRatingRows.getLong(ID);
-        if (mpaRaringId <= 0) {
-            return null;
-        }
         return new MpaRating(
                 mpaRatingRows.getLong(ID),
                 mpaRatingRows.getString(MpaRatingConstant.NAME));

@@ -14,7 +14,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static ru.yandex.practicum.filmorate.constant.GenreConstant.ID;
 
 @Component
 @RequiredArgsConstructor
@@ -24,7 +23,7 @@ public class GenreDaoImpl implements GenreDao {
 
     @Override
     public List<Genre> getGenres() {
-        String sqlToGenreTable = "select * from genre_t";
+        String sqlToGenreTable = "SELECT * FROM genre_t";
         return jdbcTemplate.query(sqlToGenreTable, (rs, rowNum) -> mapToGenre(rs))
                 .stream()
                 .filter(Objects::nonNull)
@@ -33,7 +32,7 @@ public class GenreDaoImpl implements GenreDao {
 
     @Override
     public Optional<Genre> getGenreById(long id) {
-        String sqlToGenreTable = "select * from genre_t where id = ? ";
+        String sqlToGenreTable = "SELECT * FROM genre_t WHERE id = ? ";
         return jdbcTemplate.query(sqlToGenreTable, (rs, rowNum) -> mapToGenre(rs), id)
                 .stream()
                 .filter(Objects::nonNull)
@@ -42,10 +41,9 @@ public class GenreDaoImpl implements GenreDao {
 
     @Override
     public List<Genre> getGenresByFilmId(long filmId) {
-
-        String sqlToGenreTable = "select gt.id, gt.name from genre_t as gt " +
-                "join film_genre_t as fgt  on fgt.genre_id = gt.id " +
-                "where fgt.film_id = ? ";
+        String sqlToGenreTable = "SELECT gt.id, gt.name FROM genre_t AS gt " +
+                "JOIN film_genre_t AS fgt ON fgt.genre_id = gt.id " +
+                "WHERE fgt.film_id = ? ";
         return jdbcTemplate.query(sqlToGenreTable, (rs, rowNum) -> mapToGenre(rs), filmId)
                 .stream()
                 .filter(Objects::nonNull)
@@ -53,12 +51,9 @@ public class GenreDaoImpl implements GenreDao {
     }
 
     private Genre mapToGenre(ResultSet genreRows) throws SQLException {
-        var genreId = genreRows.getLong(ID);
-        if (genreId <= 0) {
-            return null;
-        }
-        return new Genre(
-                genreRows.getLong(GenreConstant.ID),
-                genreRows.getString(GenreConstant.NAME));
+        return Genre.builder()
+                .id(genreRows.getLong(GenreConstant.ID))
+                .name(genreRows.getString(GenreConstant.NAME))
+                .build();
     }
 }

@@ -4,14 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.constant.FilmConstant;
 import ru.yandex.practicum.filmorate.dao.FilmDao;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.MpaRating;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,8 +41,8 @@ public class FilmDaoImpl implements FilmDao {
     @Override
     public Film updateFilm(Film film) {
         String sql =
-                "update film_t set id = ?, name = ?, description = ?, release_date = ?, duration = ?, mpa_rating_id = ?"
-                        + " where id = ? ";
+                "UPDATE film_t SET id = ?, name = ?, description = ?, release_date = ?, duration = ?, mpa_rating_id = ?"
+                        + " WHERE id = ? ";
         jdbcTemplate.update(sql,
                 film.getId(),
                 film.getName(),
@@ -58,7 +56,7 @@ public class FilmDaoImpl implements FilmDao {
 
     @Override
     public Optional<Film> getFilmById(long id) {
-        String sqlToFilmTable = "select * from film_t where id = ? ";
+        String sqlToFilmTable = "SELECT * FROM film_t WHERE id = ? ";
         return jdbcTemplate.query(sqlToFilmTable, (rs, rowNum) -> mapToFilm(rs), id)
                 .stream()
                 .filter(Objects::nonNull)
@@ -67,7 +65,7 @@ public class FilmDaoImpl implements FilmDao {
 
     @Override
     public List<Film> getFilms() {
-        String sqlToFilmTable = "select * from film_t";
+        String sqlToFilmTable = "SELECT * FROM film_t";
         return jdbcTemplate.query(sqlToFilmTable, (rs, rowNum) -> mapToFilm(rs))
                 .stream()
                 .filter(Objects::nonNull)
@@ -75,19 +73,25 @@ public class FilmDaoImpl implements FilmDao {
     }
 
     private Film mapToFilm(ResultSet filmRows) throws SQLException {
-        var filmId = filmRows.getLong(ID);
-        if (filmId <= 0) {
-            return null;
-        }
-        LocalDate releaseDate = filmRows.getDate(FilmConstant.RELEASE_DATE).toLocalDate();
         return new Film(
-                filmRows.getLong(FilmConstant.ID),
-                filmRows.getString(FilmConstant.NAME),
-                filmRows.getString(FilmConstant.DESCRIPTION),
-                releaseDate,
-                filmRows.getInt(FilmConstant.DURATION),
+                filmRows.getLong(ID),
+                filmRows.getString(NAME),
+                filmRows.getString(DESCRIPTION),
+                filmRows.getDate(RELEASE_DATE).toLocalDate(),
+                filmRows.getInt(DURATION),
                 MpaRating.builder()
-                        .id(filmRows.getLong(FilmConstant.MPA_RATING_ID))
+                        .id(filmRows.getLong(MPA_RATING_ID))
                         .build());
+
+        /*return Film.builder()
+                .id(filmRows.getLong(ID))
+                .name(filmRows.getString(NAME))
+                .description(filmRows.getString(DESCRIPTION))
+                .releaseDate(filmRows.getDate(RELEASE_DATE).toLocalDate())
+                .duration(filmRows.getInt(DURATION))
+                .mpa(MpaRating.builder()
+                        .id(filmRows.getLong(MPA_RATING_ID))
+                        .build())
+                .build();*/
     }
 }

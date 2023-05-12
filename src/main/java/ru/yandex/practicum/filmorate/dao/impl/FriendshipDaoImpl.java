@@ -40,7 +40,7 @@ public class FriendshipDaoImpl implements FriendshipDao {
 
     @Override
     public Set<Long> getFriendIdsByUserId(long userId) {
-        String sqlToFriendshipTable = "select * from friendship_t where user_id = ?";
+        String sqlToFriendshipTable = "SELECT * FROM friendship_t WHERE user_id = ?";
         return jdbcTemplate.query(sqlToFriendshipTable, (rs, rowNum) -> mapToFriendship(rs), userId)
                 .stream()
                 .filter(Objects::nonNull)
@@ -50,7 +50,7 @@ public class FriendshipDaoImpl implements FriendshipDao {
 
     @Override
     public Optional<Friendship> getFriendship(Friendship friendship) {
-        String sqlToFriendshipTable = "select * from friendship_t where user_id = ? and friend_id = ?";
+        String sqlToFriendshipTable = "SELECT * FROM friendship_t WHERE user_id = ? AND friend_id = ?";
 
         return jdbcTemplate.query(sqlToFriendshipTable, (rs, rowNum) -> mapToFriendship(rs),
                         friendship.getUserId(),
@@ -64,19 +64,12 @@ public class FriendshipDaoImpl implements FriendshipDao {
     public void deleteFriendship(Friendship friendship) {
         friendshipStatusRevers(friendship, false);
 
-        String sqlToFriendshipTable = "delete from friendship_t where user_id = ? and friend_id = ?";
+        String sqlToFriendshipTable = "DELETE FROM friendship_t WHERE user_id = ? AND friend_id = ?";
         jdbcTemplate.update(sqlToFriendshipTable, friendship.getUserId(),
                 friendship.getFriendId());
     }
 
     private Friendship mapToFriendship(ResultSet userRows) throws SQLException {
-        long userId = userRows.getLong(USER_ID);
-        long friendId = userRows.getLong(FRIEND_ID);
-
-        if (userId <= 0 || friendId <= 0) {
-            return null;
-        }
-
         return new Friendship(
                 userRows.getLong(ID),
                 userRows.getLong(USER_ID),
@@ -100,8 +93,8 @@ public class FriendshipDaoImpl implements FriendshipDao {
     }
 
     private Friendship updateFriendship(Friendship friendship) {
-        String sql = "update friendship_t set id = ?, user_id = ?, friend_id = ?, status = ? " +
-                " where id = ? ";
+        String sql = "UPDATE friendship_t SET id = ?, user_id = ?, friend_id = ?, status = ? " +
+                " WHERE id = ? ";
         jdbcTemplate.update(sql,
                 friendship.getId(),
                 friendship.getUserId(),

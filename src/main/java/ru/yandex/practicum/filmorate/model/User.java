@@ -10,10 +10,11 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
+//@Builder
 public class User {
 
     @PositiveOrZero
-    private long id;
+    private Long id;
 
     @Email
     @NotBlank
@@ -27,6 +28,7 @@ public class User {
     @PastOrPresent
     private LocalDate birthday;
 
+    @Builder.Default
     private Set<Long> friendsId = new HashSet<>();
 
     public User(long id, String email, String login, String name, LocalDate birthday) {
