@@ -13,6 +13,7 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,8 +28,19 @@ public class FilmValidationTests {
 
     @BeforeEach
     public void setUp() {
-        film = new Film(1, "name", "aa",
-                LocalDate.of(2002, 2, 2), 2, new MpaRating(1L, "name"));
+        film = Film.builder()
+                .id(1L)
+                .name("name")
+                .description("description")
+                .duration(65)
+                .releaseDate(LocalDate.of(2002, 2, 2))
+                .likes(new ArrayList<>())
+                .genres(new ArrayList<>())
+                .mpa(MpaRating.builder()
+                        .id(1)
+                        .name("name")
+                        .build())
+                .build();
     }
 
     @Test
