@@ -73,17 +73,7 @@ public class FilmDaoImpl implements FilmDao {
     }
 
     private Film mapToFilm(ResultSet filmRows) throws SQLException {
-        return new Film(
-                filmRows.getLong(ID),
-                filmRows.getString(NAME),
-                filmRows.getString(DESCRIPTION),
-                filmRows.getDate(RELEASE_DATE).toLocalDate(),
-                filmRows.getInt(DURATION),
-                MpaRating.builder()
-                        .id(filmRows.getLong(MPA_RATING_ID))
-                        .build());
-
-        /*return Film.builder()
+        return Film.builder()
                 .id(filmRows.getLong(ID))
                 .name(filmRows.getString(NAME))
                 .description(filmRows.getString(DESCRIPTION))
@@ -92,6 +82,7 @@ public class FilmDaoImpl implements FilmDao {
                 .mpa(MpaRating.builder()
                         .id(filmRows.getLong(MPA_RATING_ID))
                         .build())
-                .build();*/
+                .likes(new ArrayList<>())
+                .build();
     }
 }

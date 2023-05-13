@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.GenreStorage;
 
 import java.util.Collection;
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,13 +26,14 @@ public class GenreDbStorage implements GenreStorage {
 
     @Override
     public Genre getGenreById(long genreId) {
-        Optional<Genre> genre = genreDao.getGenreById(genreId);
-        if (genre.isPresent()) {
-            log.info("Получен жанр: " + genre.get());
-            return genre.get();
+        if (!isExist(genreId)) {
+            log.error("Ошибка, такой жанр не найден: id = " + genreId);
+            throw new GenreNotFoundException();
         }
-        log.error("Ошибка, такой жанр не найден: id = " + genreId);
-        throw new GenreNotFoundException();
+
+        Genre genre = genreDao.getGenreById(genreId).get();
+        log.info("Получен жанр: " + genre);
+        return genre;
     }
 
     @Override
@@ -41,5 +41,9 @@ public class GenreDbStorage implements GenreStorage {
         Collection<Genre> genres = genreDao.getGenresByFilmId(filmId);
         log.info("Получены жанры: " + genres);
         return genres;
+    }
+
+    private boolean isExist(long genreId) {
+        return genreDao.getGenreById(genreId).isPresent();
     }
 }

@@ -45,6 +45,10 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Film updateFilm(Film film) {
         getFilmById(film.getId());
+        if (!isExist(film.getId())) {
+            log.error("Ошибка, фильм не найден: " + film);
+            throw new FilmNotFoundException();
+        }
         filmGenreDao.deleteFilmGenres(film.getId());
         film = filmDao.updateFilm(film);
         if (!CollectionUtils.isEmpty(film.getGenres())) {
@@ -73,16 +77,19 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film getFilmById(long id) {
-        Optional<Film> filmOpt = filmDao.getFilmById(id);
-        if (filmOpt.isPresent()) {
-            Film film = filmOpt.get();
-            film.setMpa(mpaRatingStorage.getMpaRatingById(film.getMpa().getId()));
-            film.setGenres((List<Genre>) genreStorage.getGenresByFilmId(id));
-            log.info("Получен фильм id = " + id);
-            return film;
+        if (!isExist(id)) {
+            log.error("Ошибка, фильм id = " + id + " не найден");
+            throw new FilmNotFoundException();
         }
 
-        log.error("Ошибка, фильм id = " + id + " не найден");
-        throw new FilmNotFoundException();
+        Film film = filmDao.getFilmById(id).get();
+        film.setMpa(mpaRatingStorage.getMpaRatingById(film.getMpa().getId()));
+        film.setGenres((List<Genre>) genreStorage.getGenresByFilmId(id));
+        log.info("Получен фильм id = " + id);
+        return film;
+    }
+
+    private boolean isExist(long id) {
+        return filmDao.getFilmById(id).isPresent();
     }
 }

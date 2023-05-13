@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.model.MpaRating;
 import ru.yandex.practicum.filmorate.storage.MpaRatingStorage;
 
 import java.util.Collection;
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,12 +26,17 @@ public class MpaRatingDbStorage implements MpaRatingStorage {
 
     @Override
     public MpaRating getMpaRatingById(long mpaRatingId) {
-        Optional<MpaRating> mpaRating = mpaRatingDao.getMpaRatingById(mpaRatingId);
-        if (mpaRating.isPresent()) {
-            log.info("Получен MPA рейтинг: " + mpaRating);
-            return mpaRating.get();
+        if (!isExist(mpaRatingId)) {
+            log.error("Ошибка, такого MPA рейтинга нету: id = " + mpaRatingId);
+            throw new MpaRatingNotFoundException();
         }
-        log.error("Ошибка, такого MPA рейтинга нету: id = " + mpaRatingId);
-        throw new MpaRatingNotFoundException();
+
+        MpaRating mpaRating = mpaRatingDao.getMpaRatingById(mpaRatingId).get();
+        log.info("Получен MPA рейтинг: " + mpaRating);
+        return mpaRating;
+    }
+
+    private boolean isExist(long mpaRatingId) {
+        return mpaRatingDao.getMpaRatingById(mpaRatingId).isPresent();
     }
 }

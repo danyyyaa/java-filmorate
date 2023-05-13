@@ -60,20 +60,14 @@ public class UserDaoImpl implements UserDao {
     }
 
     private User mapToUser(ResultSet userRows) throws SQLException {
-        return new User(
-                userRows.getLong(ID),
-                userRows.getString(EMAIL),
-                userRows.getString(LOGIN),
-                userRows.getString(NAME),
-                userRows.getDate(BIRTHDAY).toLocalDate());
-
-        /*return User.builder()
+        return User.builder()
                 .id(userRows.getLong(ID))
                 .email(userRows.getString(EMAIL))
                 .login(userRows.getString(LOGIN))
                 .name(userRows.getString(NAME))
                 .birthday(userRows.getDate(BIRTHDAY).toLocalDate())
-                .build();*/
+                .friendsId(new HashSet<>())
+                .build();
     }
 
     @Override

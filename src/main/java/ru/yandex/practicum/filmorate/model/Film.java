@@ -10,9 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
+@ToString
 @Builder
 public class Film {
 
@@ -36,14 +38,4 @@ public class Film {
     private List<Long> likes = new ArrayList<>();
 
     private List<Genre> genres;
-
-    public Film(long id, String name, String description, LocalDate releaseDate,
-                int duration, MpaRating mpa) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.releaseDate = releaseDate;
-        this.duration = duration;
-        this.mpa = mpa;
-    }
 }

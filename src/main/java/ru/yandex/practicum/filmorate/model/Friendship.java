@@ -5,9 +5,11 @@ import lombok.*;
 import javax.validation.constraints.PositiveOrZero;
 
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
+@ToString
 @Builder
 public class Friendship {
     @PositiveOrZero
