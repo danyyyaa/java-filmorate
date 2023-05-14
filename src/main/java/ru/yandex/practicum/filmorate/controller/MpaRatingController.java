@@ -19,7 +19,7 @@ public class MpaRatingController {
 
     @GetMapping
     public Collection<MpaRating> getMpaRatings() {
-        return mpaRatingService.GetMpaRatings();
+        return mpaRatingService.getMpaRatings();
     }
 
     @GetMapping("/{mpaRatingId}")

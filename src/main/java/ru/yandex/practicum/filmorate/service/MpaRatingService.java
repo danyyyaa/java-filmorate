@@ -8,5 +8,5 @@ public interface MpaRatingService {
 
     MpaRating getMpaRatingById(long genreId);
 
-    Collection<MpaRating> GetMpaRatings();
+    Collection<MpaRating> getMpaRatings();
 }

@@ -20,7 +20,7 @@ public class MpaRatingServiceImpl implements MpaRatingService {
     }
 
     @Override
-    public Collection<MpaRating> GetMpaRatings() {
+    public Collection<MpaRating> getMpaRatings() {
         return mpaRatingStorage.getMpaRatings();
     }
 }
