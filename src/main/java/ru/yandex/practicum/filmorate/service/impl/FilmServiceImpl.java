@@ -16,6 +16,7 @@ public class FilmServiceImpl implements FilmService {
 
     private final FilmStorage filmStorage;
 
+    @Override
     public Film getFilmById(long filmId) {
         return filmStorage.getFilmById(filmId);
     }

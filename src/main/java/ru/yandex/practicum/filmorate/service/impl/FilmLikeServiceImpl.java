@@ -54,8 +54,8 @@ public class FilmLikeServiceImpl implements FilmLikeService {
                     }
                 })
                 .sorted(comparator.reversed())
-                .limit(count).
-                collect(Collectors.toList());
+                .limit(count)
+                .collect(Collectors.toList());
     }
 }
 
