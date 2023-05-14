@@ -20,7 +20,9 @@ import java.util.stream.Collectors;
 public class FilmLikeServiceImpl implements FilmLikeService {
 
     private final FilmLikeStorage filmLikeStorage;
+
     private final FilmStorage filmStorage;
+
     private final UserStorage userStorage;
 
     @Override
@@ -42,7 +44,7 @@ public class FilmLikeServiceImpl implements FilmLikeService {
 
     @Override
     public Collection<Film> getMostPopularFilms(int count) {
-        Comparator<Film> comparator = Comparator.comparingInt((Film film) -> film.getLikes().size());
+        Comparator<Film> comparator = Comparator.comparingInt(film -> film.getLikes().size());
         return filmStorage.getFilms()
                 .stream()
                 .peek(el -> {
