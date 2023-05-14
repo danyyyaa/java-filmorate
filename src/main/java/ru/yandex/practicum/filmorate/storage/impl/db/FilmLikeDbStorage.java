@@ -14,12 +14,13 @@ import java.util.Collection;
 @Slf4j
 @RequiredArgsConstructor
 public class FilmLikeDbStorage implements FilmLikeStorage {
+
     private final FilmLikeDao filmLikeDao;
+
     private final FilmStorage filmStorage;
 
     @Override
     public FilmLike createLike(FilmLike filmLike) {
-
         filmLikeDao.createLike(filmLike);
         log.info("Создан лайк: " + filmLike);
         return filmLike;

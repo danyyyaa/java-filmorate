@@ -23,8 +23,11 @@ import java.util.*;
 public class FilmDbStorage implements FilmStorage {
 
     private final FilmDao filmDao;
+
     private final MpaRatingStorage mpaRatingStorage;
+
     private final GenreStorage genreStorage;
+
     private final FilmGenreDao filmGenreDao;
 
     @Override

@@ -13,6 +13,7 @@ import java.util.Collection;
 @RequiredArgsConstructor
 @Slf4j
 public class FriendshipDbStorage implements FriendshipStorage {
+
     private final FriendshipDao friendshipDao;
 
     @Override
