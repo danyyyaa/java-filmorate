@@ -26,17 +26,8 @@ public class MpaRatingDbStorage implements MpaRatingStorage {
 
     @Override
     public MpaRating getMpaRatingById(long mpaRatingId) {
-        if (!isExist(mpaRatingId)) {
-            log.error("Ошибка, такого MPA рейтинга нету: id = " + mpaRatingId);
-            throw new MpaRatingNotFoundException();
-        }
-
-        MpaRating mpaRating = mpaRatingDao.getMpaRatingById(mpaRatingId).get();
+        MpaRating mpaRating = mpaRatingDao.getMpaRatingById(mpaRatingId).orElseThrow(MpaRatingNotFoundException::new);
         log.info("Получен MPA рейтинг: " + mpaRating);
         return mpaRating;
-    }
-
-    private boolean isExist(long mpaRatingId) {
-        return mpaRatingDao.getMpaRatingById(mpaRatingId).isPresent();
     }
 }

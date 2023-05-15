@@ -80,12 +80,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film getFilmById(long id) {
-        if (!isExist(id)) {
-            log.error("Ошибка, фильм id = " + id + " не найден");
-            throw new FilmNotFoundException();
-        }
-
-        Film film = filmDao.getFilmById(id).get();
+        Film film = filmDao.getFilmById(id).orElseThrow(FilmNotFoundException::new);
         film.setMpa(mpaRatingStorage.getMpaRatingById(film.getMpa().getId()));
         film.setGenres((List<Genre>) genreStorage.getGenresByFilmId(id));
         log.info("Получен фильм id = " + id);

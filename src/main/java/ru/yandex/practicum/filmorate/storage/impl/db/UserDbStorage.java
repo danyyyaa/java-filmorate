@@ -22,12 +22,8 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User createUser(User user) {
-        if (user.getName() == null || user.getName().isEmpty()) {
-            user.setName(user.getLogin());
-        }
-
-        User user1 = userDao.createUser(user);
-        log.info("Создан пользователь: " + user1);
+        User newUser = userDao.createUser(user);
+        log.info("Создан пользователь: " + newUser);
         return user;
     }
 
@@ -50,21 +46,17 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
-    public User getUserById(long userId) {
-        if (!isExist(userId)) {
-            log.error("Ошибка, пользователь не существует: id = " + userId);
-            throw new UserNotFoundException();
-        }
-        User user = userDao.getUserById(userId).get();
-        log.info("Получен пользователь: " + user);
-        return user;
-    }
-
-    @Override
     public Collection<User> getUsersByIds(Collection<Long> ids) {
         Collection<User> users = userDao.getUsersByIds((Set<Long>) ids);
         log.info("Получены пользователи: " + users);
         return users;
+    }
+
+    @Override
+    public User getUserById(long userId) {
+        User user = userDao.getUserById(userId).orElseThrow(UserNotFoundException::new);
+        log.info("Получен пользователь: " + user);
+        return user;
     }
 
     private boolean isExist(long userId) {

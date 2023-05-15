@@ -26,12 +26,7 @@ public class GenreDbStorage implements GenreStorage {
 
     @Override
     public Genre getGenreById(long genreId) {
-        if (!isExist(genreId)) {
-            log.error("Ошибка, такой жанр не найден: id = " + genreId);
-            throw new GenreNotFoundException();
-        }
-
-        Genre genre = genreDao.getGenreById(genreId).get();
+        Genre genre = genreDao.getGenreById(genreId).orElseThrow(GenreNotFoundException::new);
         log.info("Получен жанр: " + genre);
         return genre;
     }
@@ -41,9 +36,5 @@ public class GenreDbStorage implements GenreStorage {
         Collection<Genre> genres = genreDao.getGenresByFilmId(filmId);
         log.info("Получены жанры: " + genres);
         return genres;
-    }
-
-    private boolean isExist(long genreId) {
-        return genreDao.getGenreById(genreId).isPresent();
     }
 }
