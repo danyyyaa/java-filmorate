@@ -13,4 +13,6 @@ public interface UserService {
     User updateUser(User user);
 
     Collection<User> getUsers();
+
+    Collection<User> getUsersByIds(Collection<Long> ids);
 }

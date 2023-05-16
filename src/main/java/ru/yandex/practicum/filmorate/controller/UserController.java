@@ -14,7 +14,9 @@ import java.util.*;
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
+
     private final UserService userService;
+
     private final FriendshipService friendshipService;
 
     @PostMapping()

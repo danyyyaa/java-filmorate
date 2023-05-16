@@ -39,7 +39,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User updateUser(User user) {
+    public Optional<User> updateUser(User user) {
         jdbcTemplate.update("UPDATE user_t SET id = ?, email = ?, login = ?, name = ?, birthday = ? where id = ? ",
                 user.getId(),
                 user.getEmail(),
@@ -47,7 +47,7 @@ public class UserDaoImpl implements UserDao {
                 user.getName(),
                 user.getBirthday(),
                 user.getId());
-        return user;
+        return Optional.of(user);
     }
 
     @Override

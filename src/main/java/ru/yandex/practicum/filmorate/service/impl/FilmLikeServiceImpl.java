@@ -6,9 +6,9 @@ import org.springframework.util.CollectionUtils;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.FilmLike;
 import ru.yandex.practicum.filmorate.service.FilmLikeService;
+import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.storage.FilmLikeStorage;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -23,7 +23,7 @@ public class FilmLikeServiceImpl implements FilmLikeService {
 
     private final FilmStorage filmStorage;
 
-    private final UserStorage userStorage;
+    private final UserService userService;
 
     @Override
     public void createLike(long filmId, long userId) {
@@ -35,7 +35,7 @@ public class FilmLikeServiceImpl implements FilmLikeService {
 
     @Override
     public void unlike(long filmId, long userId) {
-        userStorage.getUserById(userId);
+        userService.getUserById(userId);
         filmLikeStorage.unlike(FilmLike.builder()
                 .filmId(filmId)
                 .userId(userId)

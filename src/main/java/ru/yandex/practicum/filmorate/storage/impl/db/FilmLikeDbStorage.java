@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.dao.FilmLikeDao;
+import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.FilmLike;
 import ru.yandex.practicum.filmorate.storage.FilmLikeStorage;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
@@ -33,7 +34,7 @@ public class FilmLikeDbStorage implements FilmLikeStorage {
 
     @Override
     public void unlike(FilmLike filmLike) {
-        filmStorage.getFilmById(filmLike.getFilmId());
+        filmStorage.getFilmById(filmLike.getFilmId()).orElseThrow(FilmNotFoundException::new);
         filmLikeDao.unlike(filmLike);
         log.info("Удален лайк: " + filmLike);
     }

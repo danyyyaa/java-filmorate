@@ -6,11 +6,7 @@ import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
 @Repository
 @Slf4j
@@ -20,10 +16,6 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User createUser(User user) {
-        if (user.getName() == null || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-        }
-
         user.setId(id);
         users.put(id++, user);
         log.info("Добавлен пользователь: " + user);
@@ -32,12 +24,12 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User updateUser(User user) {
+    public Optional<User> updateUser(User user) {
         if (!isExist(user.getId())) {
             throw new UserNotFoundException();
         }
         users.put(user.getId(), user);
-        return user;
+        return Optional.of(user);
     }
 
     @Override
@@ -47,11 +39,11 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User getUserById(long userId) {
+    public Optional<User> getUserById(long userId) {
         if (!isExist(userId)) {
             throw new UserNotFoundException();
         }
-        return users.get(userId);
+        return Optional.ofNullable(users.get(userId));
     }
 
     @Override

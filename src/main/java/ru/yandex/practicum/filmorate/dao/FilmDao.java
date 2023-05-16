@@ -6,9 +6,10 @@ import java.util.Collection;
 import java.util.Optional;
 
 public interface FilmDao {
-    Film createFilm(Film film);
 
-    Film updateFilm(Film film);
+    Optional<Film>  createFilm(Film film);
+
+    Optional<Film>  updateFilm(Film film);
 
     Optional<Film> getFilmById(long filmId);
 

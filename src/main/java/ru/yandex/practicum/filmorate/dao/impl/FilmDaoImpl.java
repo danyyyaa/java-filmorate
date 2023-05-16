@@ -4,8 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.constant.GenreConstant;
+import ru.yandex.practicum.filmorate.constant.MpaRatingConstant;
 import ru.yandex.practicum.filmorate.dao.FilmDao;
+import ru.yandex.practicum.filmorate.exception.MpaRatingNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.MpaRating;
 
 import java.sql.ResultSet;
@@ -19,10 +23,11 @@ import static ru.yandex.practicum.filmorate.constant.FilmConstant.ID;
 @Component
 @RequiredArgsConstructor
 public class FilmDaoImpl implements FilmDao {
+
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    public Film createFilm(Film film) {
+    public Optional<Film>  createFilm(Film film) {
         Map<String, Object> keys = new SimpleJdbcInsert(this.jdbcTemplate)
                 .withTableName(FILM_TABLE)
                 .usingColumns(NAME, DESCRIPTION, RELEASE_DATE, DURATION, MPA_RATING_ID)
@@ -35,11 +40,11 @@ public class FilmDaoImpl implements FilmDao {
                 .getKeys();
         assert keys != null;
         film.setId((Long) keys.get(ID));
-        return film;
+        return Optional.of(film);
     }
 
     @Override
-    public Film updateFilm(Film film) {
+    public Optional<Film>  updateFilm(Film film) {
         String sql =
                 "UPDATE film_t SET id = ?, name = ?, description = ?, release_date = ?, duration = ?, mpa_rating_id = ?"
                         + " WHERE id = ? ";
@@ -51,7 +56,7 @@ public class FilmDaoImpl implements FilmDao {
                 film.getDuration(),
                 film.getMpa().getId(),
                 film.getId());
-        return film;
+        return Optional.of(film);
     }
 
     @Override
@@ -72,6 +77,37 @@ public class FilmDaoImpl implements FilmDao {
                 .collect(Collectors.toList());
     }
 
+    private Genre mapToGenre(ResultSet genreRows) throws SQLException {
+        return Genre.builder()
+                .id(genreRows.getLong(GenreConstant.ID))
+                .name(genreRows.getString(GenreConstant.NAME))
+                .build();
+    }
+
+    private List<Genre> getGenresByFilmId(long filmId) {
+        String sqlToGenreTable = "SELECT gt.id, gt.name FROM genre_t AS gt " +
+                "JOIN film_genre_t AS fgt ON fgt.genre_id = gt.id " +
+                "WHERE fgt.film_id = ? ";
+        return jdbcTemplate.query(sqlToGenreTable, (rs, rowNum) -> mapToGenre(rs), filmId)
+                .stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
+    private MpaRating mapToMpaRating(ResultSet mpaRatingRows) throws SQLException {
+        return new MpaRating(
+                mpaRatingRows.getLong(MpaRatingConstant.ID),
+                mpaRatingRows.getString(MpaRatingConstant.NAME));
+    }
+
+    private Optional<MpaRating> getMpaRatingById(long id) {
+        String sqlToMpaRatingTable = "select * from mpa_rating_t where id = ? ";
+        return jdbcTemplate.query(sqlToMpaRatingTable, (rs, rowNum) -> mapToMpaRating(rs), id)
+                .stream()
+                .filter(Objects::nonNull)
+                .findFirst();
+    }
+
     private Film mapToFilm(ResultSet filmRows) throws SQLException {
         return Film.builder()
                 .id(filmRows.getLong(ID))
@@ -79,10 +115,9 @@ public class FilmDaoImpl implements FilmDao {
                 .description(filmRows.getString(DESCRIPTION))
                 .releaseDate(filmRows.getDate(RELEASE_DATE).toLocalDate())
                 .duration(filmRows.getInt(DURATION))
-                .mpa(MpaRating.builder()
-                        .id(filmRows.getLong(MPA_RATING_ID))
-                        .build())
+                .mpa(getMpaRatingById(filmRows.getLong(MPA_RATING_ID)).orElseThrow(MpaRatingNotFoundException::new))
                 .likes(new ArrayList<>())
+                .genres(getGenresByFilmId(filmRows.getLong(ID)))
                 .build();
     }
 }

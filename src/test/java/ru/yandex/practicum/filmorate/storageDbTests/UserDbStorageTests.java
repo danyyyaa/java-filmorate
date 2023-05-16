@@ -59,13 +59,13 @@ public class UserDbStorageTests {
                 .build();
 
         userStorage.updateUser(updatedUser);
-        assertEquals("updatedName", userStorage.getUserById(updatedUser.getId()).getName());
+        assertEquals("updatedName", userStorage.getUserById(updatedUser.getId()).get().getName());
     }
 
     @Test
     public void getUserByIdTest() {
         userStorage.createUser(user);
-        assertEquals(user.getId(), userStorage.getUserById(user.getId()).getId());
+        assertEquals(user.getId(), userStorage.getUserById(user.getId()).get().getId());
     }
 
     @Test

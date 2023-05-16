@@ -7,9 +7,10 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface UserDao {
+
     User createUser(User user);
 
-    User updateUser(User user);
+    Optional<User> updateUser(User user);
 
     Optional<User> getUserById(long userId);
 

@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Friendship;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.FriendshipService;
+import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.storage.FriendshipStorage;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -19,14 +19,16 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class FriendshipServiceImpl implements FriendshipService {
+
     private final FriendshipStorage friendshipStorage;
-    private final UserStorage userStorage;
+
+    private final UserService userService;
 
     @Override
     public Collection<Long> getFriendIdsByUserId(long userId) {
         Set<Long> friends = (Set<Long>) friendshipStorage.getFriendIdsByUserId(userId);
 
-        return userStorage.getUsersByIds(friends)
+        return userService.getUsersByIds(friends)
                 .stream()
                 .map(User::getId)
                 .collect(Collectors.toSet());
@@ -34,13 +36,12 @@ public class FriendshipServiceImpl implements FriendshipService {
 
     @Override
     public Friendship addFriend(long userId, long friendId) {
-        userStorage.getUserById(userId);
-        userStorage.getUserById(friendId);
+        userService.getUserById(userId);
+        userService.getUserById(friendId);
         return friendshipStorage.createFriendship(Friendship.builder()
                 .userId(userId)
                 .friendId(friendId)
                 .build());
-
     }
 
     @Override
@@ -56,14 +57,14 @@ public class FriendshipServiceImpl implements FriendshipService {
         Set<Long> userFriendsId = new HashSet<>(friendshipStorage.getFriendIdsByUserId(userId1));
         Set<Long> friendFriendsId = new HashSet<>(friendshipStorage.getFriendIdsByUserId(userId2));
         Set<Long> commonFriendsIds = new HashSet<>(getCommonElements(userFriendsId, friendFriendsId));
-        return userStorage.getUsersByIds(commonFriendsIds);
+        return userService.getUsersByIds(commonFriendsIds);
     }
 
     @Override
     public Collection<User> getFriendsByUserId(long userId) {
         Set<Long> friends = (Set<Long>) friendshipStorage.getFriendIdsByUserId(userId);
 
-        return userStorage.getUsersByIds(friends);
+        return userService.getUsersByIds(friends);
     }
 
     private static <T> Set<T> getCommonElements(Set<T> first, Set<T> second) {

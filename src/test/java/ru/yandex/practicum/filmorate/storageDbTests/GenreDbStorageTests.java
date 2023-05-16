@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.MpaRating;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.storage.GenreStorage;
 
 import java.time.LocalDate;
@@ -24,12 +24,13 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class GenreDbStorageTests {
 
     private final GenreStorage genreStorage;
-    private final FilmStorage filmStorage;
+
+    private final FilmService filmService;
 
 
     @Test
     public void getGenreByIdTest() {
-        Optional<Genre> genre = Optional.ofNullable(genreStorage.getGenreById(1));
+        Optional<Genre> genre = genreStorage.getGenreById(1);
         assertThat(genre)
                 .isPresent()
                 .hasValueSatisfying(genre1 -> assertThat(genre1).hasFieldOrProperty("id"));
@@ -61,7 +62,7 @@ public class GenreDbStorageTests {
                         .name("name")
                         .build())
                 .build();
-        filmStorage.createFilm(film);
+        filmService.createFilm(film);
 
         Optional<Genre> genre = genreStorage.getGenresByFilmId(film.getId()).stream().findFirst();
         assertThat(genre)

@@ -31,7 +31,7 @@ public class MpaRatingDbStorageTests {
 
     @Test
     public void testGetRatingById() {
-        Optional<MpaRating> mpaOptional = Optional.ofNullable(mpaRatingStorage.getMpaRatingById(1));
+        Optional<MpaRating> mpaOptional = mpaRatingStorage.getMpaRatingById(1);
         assertThat(mpaOptional)
                 .isPresent()
                 .hasValueSatisfying(mpa -> assertThat(mpa).hasFieldOrProperty("id"));

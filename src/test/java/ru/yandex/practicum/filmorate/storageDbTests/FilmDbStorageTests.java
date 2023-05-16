@@ -45,7 +45,7 @@ public class FilmDbStorageTests {
 
     @Test
     public void createFilmTest() {
-        Optional<Film> film1 = Optional.ofNullable(filmStorage.createFilm(film));
+        Optional<Film> film1 = filmStorage.createFilm(film);
 
         assertThat(film1)
                 .isPresent()
@@ -82,12 +82,12 @@ public class FilmDbStorageTests {
 
         filmStorage.updateFilm(updatedFilm);
 
-        assertEquals("updatedName", filmStorage.getFilmById(1L).getName());
+        assertEquals("updatedName", filmStorage.getFilmById(1L).get().getName());
     }
 
     @Test
     public void getFilmByIdTest() {
         filmStorage.createFilm(film);
-        assertEquals(film.getId(), filmStorage.getFilmById(film.getId()).getId());
+        assertEquals(film.getId(), filmStorage.getFilmById(film.getId()).get().getId());
     }
 }
