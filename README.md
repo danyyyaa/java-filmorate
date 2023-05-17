@@ -67,13 +67,13 @@
 ### Схема базы данных
 Схема отображает отношения таблиц в базе данных:
 
-+ film - данные о фильмах (primary key - film_id, foreign keys - mpa_rating_id)
-+ genre - названия жанров фильма (primary key - genre_id)
-+ film_genre - данные о жанрах какого-то фильма (primary key - film_genre_id, foreign keys - film_id, genre_id)
-+ mpa_rating - определяет возрастное ограничение для фильма (primary key - mpa_rating_id)
-+ film_like - информация о лайках фильма и кто их поставил (primary key - like_id, foreign keys - user_id, film_id)
-+ user - данные о пользователях (primary key - user_id, foreign keys - friend_id, like_id)
-+ friendship - содержит информации о статусе «дружбы» между двумя пользователями (primary key - friendship_id, foreign keys - user_id, friend_id)
++ film_t - данные о фильмах (primary key - film_id, foreign keys - mpa_rating_id)
++ genre_t - названия жанров фильма (primary key - genre_id)
++ film_genre_t - данные о жанрах какого-то фильма (primary key - film_genre_id, foreign keys - film_id, genre_id)
++ mpa_rating_t - определяет возрастное ограничение для фильма (primary key - mpa_rating_id)
++ film_like_t - информация о лайках фильма и кто их поставил (primary key - like_id, foreign keys - user_id, film_id)
++ user_t - данные о пользователях (primary key - user_id, foreign keys - friend_id, like_id)
++ friendship_t - содержит информации о статусе «дружбы» между двумя пользователями (primary key - friendship_id, foreign keys - user_id, friend_id)
 
 
 
