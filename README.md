@@ -81,7 +81,7 @@
    
    °  status = false — в таблице одна запись о дружбе двух пользователей(id1 = id2).
 
-![image](https://user-images.githubusercontent.com/118910569/235626817-6cd3bfc8-4d72-4ac7-bdf9-8d88be4eb96a.png)
+![image](https://github.com/danyyyaa/java-filmorate/assets/118910569/e1826803-0974-48ef-b488-0f31ff60ea87)
 
 #### Примеры запросов:
 
