@@ -13,10 +13,10 @@ import javax.validation.constraints.Positive;
 @ToString
 @Builder
 public class Genre {
+    
     @Positive
     private Long id;
 
     @NotBlank
     private String name;
-
 }
