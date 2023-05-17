@@ -94,14 +94,14 @@
  создание пользователя
  
  ```sql
- INSERT INTO user (name, email, login, birthday)
+ INSERT INTO user_t (name, email, login, birthday)
  VALUES ( ?, ?, ?, ? );
  ```
  
  редактирование пользователя
  
  ```sql
- UPDATE user
+ UPDATE user_t
  SET email = ?,
  login = ?,
  name = ?,
@@ -113,20 +113,20 @@
  
  ```sql
  SELECT *
- FROM user
+ FROM user_t
  ```
  получение информации о пользователе по его id
  
  ```sql
  SELECT *
- FROM user
+ FROM user_t
  WHERE id = ?
  ```
  
  добавление в друзья
  
  ```sql
- INSERT INTO friendship (user_id, friend_id, status)
+ INSERT INTO friendship_t (user_id, friend_id, status)
  VALUES (?, ?, ?)
  ```
  
@@ -134,32 +134,32 @@
  
  ```sql
  DELETE
- FROM friendship
+ FROM friendship_t
  WHERE user_id = ? AND friend_id = ?
  ```
  
  возвращает список пользователей, являющихся его друзьями
  ```sql
- SELECT f.*
- FROM friendship AS f
- INNER JOIN user AS u ON u.user_id = f.friend_id
- WHERE f.user_id = ?
+ SELECT ut.*
+ FROM friendship_t AS fst
+ INNER JOIN user_t AS ut ON ut.id = fst.friend_id
+ WHERE fst.user_id = ?
  ```
  
  список друзей, общих с другим пользователем
  
  ```sql
- SELECT u.*
- FROM user AS u
- INNER JOIN friendship AS fs ON u.id = fs.friend_id
+ SELECT ut.*
+ FROM user_t AS ut
+ INNER JOIN friendship_t AS fst ON ut.id = fst.friend_id
  WHERE ut.id = ?
 
  INTERSECT
 
- SELECT u.*
- FROM user as u
- INNER JOIN friendship as fs ON u.id = fs.friend_id
- WHERE fs.user_id = ?
+ SELECT ut.*
+ FROM user_t as ut
+ INNER JOIN friendship_t as fst ON ut.id = fst.friend_id
+ WHERE fst.user_id = ?
  ```
 
  2. Фильмы
@@ -167,14 +167,14 @@
  создание фильма
  
  ```sql
- INSERT INTO film (name, description, release_date, duration, mpa_rating_id)
+ INSERT INTO film_t (name, description, release_date, duration, mpa_rating_id)
  VALUES (?, ?, ?, ?, ?)
  ```
  
  редактирование фильма
  
  ```sql
- UPDATE film
+ UPDATE film_t
  SET name = ?,
  description = ?,
  release_date = ?,
@@ -186,51 +186,48 @@
  получение списка всех фильмов
  
  ```sql
- SELECT f.*, mp.name, COUNT(fl.user_id) AS rate
- FROM film AS f
- LEFT JOIN mpa_rating AS mp ON f.mpa_rating_id = mp.id
- LEFT JOIN film_like AS fl ON f.id = fl.film_id
- GROUP BY f.id
- ORDER BY f.id
+ SELECT ft.*, mpt.name, COUNT(flt.user_id) AS rate
+ FROM film_t AS ft
+ LEFT JOIN mpa_rating_t AS mpt ON ft.mpa_rating_id = mpt.id
+ LEFT JOIN film_like_t AS flt ON ft.id = flt.film_id
+ GROUP BY ft.id
+ ORDER BY ft.id
  ```
  
  получение информации о фильме по его id
  
  ```sql
- SELECT f.*, mp.name, COUNT(fl.user_id) AS rate
- FROM film AS f
- LEFT JOIN mpa_rating AS mpt ON f.mpa_rating_id = mp.id
- LEFT JOIN film_like AS fl ON f.id = fl.film_id
- WHERE f.id = 2
- GROUP BY f.id
+ SELECT ft.*, mpt.name, COUNT(flt.user_id) AS rate
+ FROM film_t AS ft
+ LEFT JOIN mpa_rating_t AS mpt ON ft.mpa_rating_id = mpt.id
+ LEFT JOIN film_like_t AS flt ON ft.id = flt.film_id
+ WHERE ft.id = 2
+ GROUP BY ft.id
  ```
  
  пользователь ставит лайк фильму
  
   ```sql
-  INSERT INTO film_like (film_id, user_id)
-  VALUES (?, ?)
+ INSERT INTO film_like_t (film_id, user_id)
+ VALUES (?, ?)
   ```
   
   пользователь удаляет лайк
   
   ```sql
  DELETE
- FROM film_like
+ FROM film_like_t
  WHERE film_id = ? AND user_id = ?
   ```
  
  возвращает список из первых count фильмов по количеству лайков
  ```sql
-SELECT f.*,
-       mp.name,
-       COUNT(fl.user_id) AS rate
-FROM film AS f
-LEFT JOIN mpa_rating AS mp ON f.mpa_rating_id = mp.id
-LEFT JOIN film_like AS fl ON f.id = fl.film_id
-GROUP BY f.id
-ORDER BY rate DESC,
-         f.id
+SELECT ft.*, mpt.name, COUNT(flt.user_id) AS rate
+FROM film_t AS ft
+LEFT JOIN mpa_rating_t AS mpt ON ft.mpa_rating_id = mpt.id
+LEFT JOIN film_like_t AS flt ON ft.id = flt.film_id
+GROUP BY ft.id
+ORDER BY rate DESC, ft.id
 LIMIT ?
  ```
  
