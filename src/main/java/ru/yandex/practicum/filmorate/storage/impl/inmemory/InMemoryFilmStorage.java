@@ -1,18 +1,22 @@
-package ru.yandex.practicum.filmorate.storage.film;
+package ru.yandex.practicum.filmorate.storage.impl.inmemory;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 @Slf4j
 public class InMemoryFilmStorage implements FilmStorage {
+
     private static long id = 1L;
+
     private final Map<Long, Film> films = new HashMap<>();
 
     @Override
@@ -22,7 +26,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film updateFilm(Film film) {
+    public Optional<Film> updateFilm(Film film) {
         if (!isExist(film.getId())) {
             log.error("Обновление несуществующего фильма: " + film);
             throw new FilmNotFoundException("Ошибка, обновление несуществующего фильма: " + film);
@@ -31,25 +35,25 @@ public class InMemoryFilmStorage implements FilmStorage {
         films.put(film.getId(), film);
         log.info("Обновлен фильм: " + film);
 
-        return film;
+        return Optional.of(film);
     }
 
     @Override
-    public Film createFilm(Film film) {
+    public Optional<Film> createFilm(Film film) {
         film.setId(id);
         films.put(id++, film);
         log.info("Добавлен фильм: " + film);
 
-        return film;
+        return Optional.of(film);
     }
 
     @Override
-    public Film getFilmById(long filmId) {
+    public Optional<Film> getFilmById(long filmId) {
         if (!isExist(filmId)) {
             log.error("Получение несуществующего фильма:" + filmId);
             throw new FilmNotFoundException("Ошибка, фильм " + filmId + " не найден");
         }
-        return films.get(filmId);
+        return Optional.ofNullable(films.get(filmId));
     }
 
     private boolean isExist(long filmId) {

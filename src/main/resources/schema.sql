@@ -1,0 +1,60 @@
+CREATE TABLE IF NOT EXISTS mpa_rating_t
+(
+    id   BIGINT  NOT NULL AUTO_INCREMENT,
+    name VARCHAR NOT NULL,
+    CONSTRAINT mpa_rating_pk PRIMARY KEY (id)
+);
+CREATE TABLE IF NOT EXISTS film_t
+(
+    id            BIGINT  NOT NULL AUTO_INCREMENT,
+    name          VARCHAR NOT NULL,
+    DESCRIPTION   VARCHAR(200),
+    release_date  DATE,
+    duration      Integer,
+    mpa_rating_id BIGINT  NOT NULL,
+    CONSTRAINT film_pk PRIMARY KEY (id),
+    CONSTRAINT film_fk FOREIGN KEY (mpa_rating_id) REFERENCES mpa_rating_T (id) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+CREATE TABLE IF NOT EXISTS genre_t
+(
+    id   BIGINT  NOT NULL AUTO_INCREMENT,
+    name VARCHAR NOT NULL,
+    CONSTRAINT genre_pk PRIMARY KEY (id)
+);
+CREATE TABLE IF NOT EXISTS user_t
+(
+    id       BIGINT  NOT NULL AUTO_INCREMENT,
+    name     VARCHAR,
+    email    VARCHAR NOT NULL,
+    login    VARCHAR NOT NULL,
+    birthday DATE,
+    CONSTRAINT user_pk PRIMARY KEY (id)
+);
+CREATE TABLE IF NOT EXISTS film_genre_t
+(
+    id       BIGINT NOT NULL AUTO_INCREMENT,
+    film_id  BIGINT NOT NULL,
+    genre_id BIGINT NOT NULL,
+    CONSTRAINT film_genre_pk PRIMARY KEY (id),
+    CONSTRAINT film_genre_fk FOREIGN KEY (genre_id) REFERENCES genre_T (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT film_genre_fk_1 FOREIGN KEY (film_id) REFERENCES film_T (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE TABLE IF NOT EXISTS friendship_t
+(
+    id        BIGINT  NOT NULL AUTO_INCREMENT,
+    user_id   BIGINT  NOT NULL,
+    friend_id BIGINT  NOT NULL,
+    status    BOOLEAN NOT NULL,
+    CONSTRAINT friendship_pk PRIMARY KEY (id),
+    CONSTRAINT friendship_id_fk FOREIGN KEY (friend_id) REFERENCES user_T (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT user_id_fk FOREIGN KEY (user_id) REFERENCES user_T (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE TABLE IF NOT EXISTS film_like_t
+(
+    id      BIGINT NOT NULL AUTO_INCREMENT,
+    film_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
+    CONSTRAINT id_pk PRIMARY KEY (id),
+    CONSTRAINT film_id_fk FOREIGN KEY (film_id) REFERENCES film_T (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT user_id_LKS_fk FOREIGN KEY (user_id) REFERENCES user_T (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
