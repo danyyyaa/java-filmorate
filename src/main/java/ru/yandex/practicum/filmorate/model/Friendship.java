@@ -12,6 +12,7 @@ import javax.validation.constraints.PositiveOrZero;
 @ToString
 @Builder
 public class Friendship {
+    
     @PositiveOrZero
     private Long id;
 
@@ -22,5 +23,4 @@ public class Friendship {
     private Long friendId;
 
     private Boolean status;
-
 }
